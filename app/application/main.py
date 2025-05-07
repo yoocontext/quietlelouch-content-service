@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from application.lifespan import lifespan
-from application.api.v1.handlers import router as user_router
+from application.api.v1.base import router as v1_router
 
 
 def create_app() -> FastAPI:
@@ -14,6 +14,6 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
-    app.include_router(user_router)
+    app.include_router(v1_router)
 
     return app
