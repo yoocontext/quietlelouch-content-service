@@ -15,6 +15,7 @@ class Manga(BaseEntity):
 
 @dataclass(kw_only=True)
 class Image(BaseEntity):
+    title: str
     url: str
     height: int
     weight: int
@@ -23,7 +24,8 @@ class Image(BaseEntity):
 
 
 @dataclass(kw_only=True)
-class Video(BaseEntity):
+class Gif(BaseEntity):
+    title: str
     url: str
     height: int
     weight: int
@@ -33,7 +35,8 @@ class Video(BaseEntity):
 
 
 @dataclass(kw_only=True)
-class Gif(BaseEntity):
+class Video(BaseEntity):
+    title: str
     url: str
     height: int
     weight: int
