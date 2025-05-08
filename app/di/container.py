@@ -5,6 +5,8 @@ from dishka import make_async_container, AsyncContainer
 from .providers import (
     SettingsProvider,
     FastStreamProvider,
+    DatabaseProvider,
+    Boto3Provider,
 )
 
 
@@ -13,5 +15,7 @@ async def get_container() -> AsyncContainer:
     container: AsyncContainer = make_async_container(
         SettingsProvider(),
         FastStreamProvider(),
+        DatabaseProvider(),
+        Boto3Provider(),
     )
     return container

@@ -1,5 +1,6 @@
 from typing import AsyncIterable
 
+from aioboto3 import Session
 from dishka import Provider, Scope, provide
 from faststream.rabbit import RabbitBroker
 from sqlalchemy.ext.asyncio import (
@@ -10,6 +11,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from core.settings.base import CommonSettings
+from infra.s3.boto_service import AsyncS3ClientProtocol
 
 
 class FastStreamProvider(Provider):
@@ -39,3 +41,19 @@ class DatabaseProvider(Provider):
     ) -> AsyncIterable[AsyncSession]:
         async with sessionmaker() as session:
             yield session
+
+
+class Boto3Provider(Provider):
+    @provide(scope=Scope.APP)
+    def create_session(self) -> Session:
+        session = Session()
+        return session
+
+    @provide(scope=Scope.REQUEST)
+    async def create_client(self, session: Session, settings: CommonSettings) -> AsyncIterable[AsyncS3ClientProtocol]:
+        async with session.client(service_name="s3",
+            aws_access_key_id=settings.minio.aws_access_key_id,
+            aws_secret_access_key=settings.minio.aws_secret_access_key,
+            endpoint_url=settings.minio.aws_secret_access_key,
+        ) as client:
+            yield client
