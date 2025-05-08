@@ -29,7 +29,16 @@ class PgSettings(BaseSettings):
         return rf"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
 
 
+class MinioSettings(BaseSettings):
+    model_config = SettingsConfigDict(extra="allow")
+
+    aws_access_key_id: str = Field(alias="AWS_ACCESS_KEY_ID", default="AWS_ACCESS_KEY_ID")
+    aws_secret_access_key: str = Field(alias="AWS_SECRET_ACCESS_KEY", default="AWS_SECRET_ACCESS_KEY")
+    endpoint_url: str = Field(alias="ENDPOINT_URL", default="ENDPOINT_URL")
+
+
 class CommonSettings(BaseSettings):
     pg: PgSettings
     rmq: RmqSettings
+    minio: MinioSettings
 
