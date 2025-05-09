@@ -17,6 +17,7 @@ class BotoClient:
 
     async def get_content(self, content_uid: UUID) -> S3GetObjectResponse:
         response: dict = await self.client.get_object(Bucket=self.bucket_name, Key=str(content_uid))
+        # todo добавить обработку ошибок
         return self._map_get_object(response)
 
     async def put_content(self, content_uid: UUID, body: bytes) -> S3PutObjectResponse:
