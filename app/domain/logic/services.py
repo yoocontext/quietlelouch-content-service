@@ -1,2 +1,2 @@
-class IBaseService:
+class BaseService:
     ...

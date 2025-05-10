@@ -6,7 +6,7 @@ from dotenv import dotenv_values
 from core.settings.base import (
     CommonSettings,
     PgSettings,
-    RmqSettings,
+    RmqSettings, MinioSettings,
 )
 
 
@@ -17,6 +17,7 @@ class DevSettings(CommonSettings):
 
         data["pg"] = PgSettings.model_validate(env_data)
         data["rmq"] = RmqSettings.model_validate(env_data)
+        data["minio"] = MinioSettings.model_validate(env_data)
 
         super().__init__(**data)
 
@@ -24,3 +25,4 @@ class DevSettings(CommonSettings):
 @lru_cache(1)
 def get_settings() -> DevSettings:
     return DevSettings()
+
