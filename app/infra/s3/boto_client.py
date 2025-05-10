@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+from botocore.exceptions import ClientError
+
+from domain.entities.content import MediaType
 from infra.s3.base import (
     AsyncS3ClientProtocol,
     S3DeleteObjectResponse,
@@ -8,6 +11,7 @@ from infra.s3.base import (
     S3PutObjectResponse,
     S3ListObjectsV2Response,
 )
+from infra.s3.exceptions import ContentNotExistsException
 
 
 @dataclass
@@ -16,11 +20,21 @@ class BotoClient:
     bucket_name: str
 
     async def get_content(self, content_uid: UUID) -> S3GetObjectResponse:
-        response: dict = await self.client.get_object(Bucket=self.bucket_name, Key=str(content_uid))
-        # todo добавить обработку ошибок
+        try:
+            response: dict = await self.client.get_object(Bucket=self.bucket_name, Key=str(content_uid))
+        except ClientError as err:
+            if err.response["Error"]["Code"] == "NoSuchKey":
+                raise ContentNotExistsException(content_uid=content_uid)
+            else:
+                raise
         return self._map_get_object(response)
 
-    async def put_content(self, content_uid: UUID, body: bytes) -> S3PutObjectResponse:
+    async def put_content(
+        self,
+        content_uid: UUID,
+        body: bytes,
+        content_type: ContentType
+    ) -> S3PutObjectResponse:
         response: dict = await self.client.put_object(
             Bucket=self.bucket_name,
             Key=str(content_uid),
@@ -29,10 +43,16 @@ class BotoClient:
         return self._map_put_object(response)
 
     async def delete_content(self, content_uid: UUID) -> S3DeleteObjectResponse:
-        response: dict = await self.client.delete_object(
-            Bucket=self.bucket_name,
-            Key=str(content_uid),
-        )
+        try:
+            response: dict = await self.client.delete_object(
+                Bucket=self.bucket_name,
+                Key=str(content_uid),
+            )
+        except ClientError as err:
+            if err.response["Error"]["Code"] == "NoSuchKey":
+                raise ContentNotExistsException(content_uid=content_uid)
+            else:
+                raise
         return self._map_delete_object(response)
 
     async def list_contents(self, prefix: str) -> S3ListObjectsV2Response:
