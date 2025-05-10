@@ -7,7 +7,7 @@ from .base import BaseEntity
 @dataclass(kw_only=True)
 class Manga(BaseEntity):
     title: str
-    extension: "Extension"
+    media_type: "MediaType"
     pages_count: int
     pages: list["Page"]
     tags: list["Tag"]
@@ -20,7 +20,7 @@ class Image(BaseEntity):
     height: int
     weight: int
     size: int
-    extension: "Extension"
+    media_type: "MediaType"
 
 
 @dataclass(kw_only=True)
@@ -31,7 +31,7 @@ class Gif(BaseEntity):
     weight: int
     size: int
     duration: int
-    extension: "Extension"
+    media_type: "MediaType"
 
 
 @dataclass(kw_only=True)
@@ -42,7 +42,7 @@ class Video(BaseEntity):
     weight: int
     size: int
     duration: int
-    extension: "Extension"
+    media_type: "MediaType"
 
 
 @dataclass(kw_only=True)
@@ -53,11 +53,11 @@ class Page(BaseEntity):
     size: int
 
 
-class Extension(Enum):
-    jpeg: str = "jpeg"
-    png: str = "png"
-    git: str = "gif"
-    mp4: str = "mp4"
+class MediaType(Enum):
+    JPEG = "image/jpeg"
+    PNG = "image/png"
+    GIF = "image/gif"
+    MP4 = "video/mp4"
 
 
 class Tag(BaseEntity):
