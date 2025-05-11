@@ -1,50 +1,65 @@
 from uuid import UUID
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Annotated
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .base import BaseOrm
-from .mixins import (
+from infra.pg.models.author import AuthorOrm
+from infra.pg.models.common.base import BaseOrm
+from infra.pg.models.common.mixins import (
     IntPkMixin,
     UidPkMixin,
     CreateAtMixin,
-    UpdateAtMixin
+    UpdateAtMixin,
 )
+from infra.pg.models.title import TitleOrm
 
 if TYPE_CHECKING:
-    from .common import TagOrm, RoleOrm
+    from .language import LanguageOrm
+    from .role import RoleOrm
+    from .tag import TagOrm
+
 
 class MangaOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
     __tablename__ = "mangas"
 
-    title: Mapped[str]
+    name: Mapped[str]
     description: Mapped[str | None]
     pages_count: Mapped[int]
     media_type: Mapped[str]
+    nsfw: Mapped[bool]
+    added_by: Mapped[Annotated[UUID, "foreign key to UserOrm from User Service"]]
 
-    pages: Mapped[list["PageOrm"]] = relationship(back_populates="manga")
     tags: Mapped[list["TagOrm"]] = relationship(
         secondary="a_mangas_tags",
         back_populates="mangas",
     )
     access_roles: Mapped[list["RoleOrm"]] = relationship(
         secondary="a_mangas_roles",
-        back_populates="mangas"
+        back_populates="mangas",
     )
+    pages: Mapped[list["PageOrm"]] = relationship(back_populates="manga")
+    title: Mapped["TitleOrm"] = relationship(back_populates="mangas")
+    author: Mapped["AuthorOrm"] = relationship(back_populates="mangas")
+    language: Mapped["LanguageOrm"] = relationship(back_populates="mangas")
 
+    title_pk: Mapped[int | None] = mapped_column(ForeignKey("titles.pk"))
+    author_uid: Mapped[UUID] = mapped_column(ForeignKey("authors.uid"))
+    language_pk: Mapped[int] = mapped_column(ForeignKey("languages.pk"))
 
 
 class ImageOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
     __tablename__ = "images"
 
-    title: Mapped[str | None]
+    name: Mapped[str]
     description: Mapped[str | None]
     url: Mapped[str]
     height: Mapped[str]
     weight: Mapped[str]
     size: Mapped[int]
     media_type: Mapped[str]
+    nsfw: Mapped[bool]
+    added_by: Mapped[Annotated[UUID, "foreign key to UserOrm from User Service"]]
 
     tags: Mapped[list["TagOrm"]] = relationship(
         secondary="a_images_tags",
@@ -54,11 +69,19 @@ class ImageOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
         secondary="a_images_roles",
         back_populates="images"
     )
+    title: Mapped["TitleOrm"] = relationship(back_populates="images")
+    author: Mapped["AuthorOrm"] = relationship(back_populates="images")
+    language: Mapped["LanguageOrm"] = relationship(back_populates="images")
+
+    author_uid: Mapped[UUID] = mapped_column(ForeignKey("authors.uid"))
+    title_pk: Mapped[int | None] = mapped_column(ForeignKey("titles.pk"))
+    language_pk: Mapped[int] = mapped_column(ForeignKey("languages"))
+
 
 class GifOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
     __tablename__ = "gifs"
 
-    title: Mapped[str | None]
+    name: Mapped[str]
     description: Mapped[str | None]
     url: Mapped[str]
     height: Mapped[int]
@@ -66,6 +89,8 @@ class GifOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
     size: Mapped[int]
     duration: Mapped[int]
     media_type: Mapped[str]
+    nsfw: Mapped[bool]
+    added_by: Mapped[Annotated[UUID, "foreign key to UserOrm from User Service"]]
 
     tags: Mapped[list["TagOrm"]] = relationship(
         secondary="a_gifs_tags",
@@ -75,12 +100,19 @@ class GifOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
         secondary="a_gifs_roles",
         back_populates="gifs"
     )
+    title: Mapped["TitleOrm"] = relationship(back_populates="gifs")
+    author: Mapped["AuthorOrm"] = relationship(back_populates="gifs")
+    language: Mapped["LanguageOrm"] = relationship(back_populates="gifs")
+
+    author_uid: Mapped[UUID] = mapped_column(ForeignKey("authors.uid"))
+    title_pk: Mapped[int | None] = mapped_column(ForeignKey("titles.pk"))
+    language_pk: Mapped[int] = mapped_column(ForeignKey("languages"))
 
 
 class VideoOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
     __tablename__ = "videos"
 
-    title: Mapped[str | None]
+    name: Mapped[str]
     description: Mapped[str | None]
     url: Mapped[str]
     height: Mapped[int]
@@ -88,6 +120,8 @@ class VideoOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
     size: Mapped[int]
     duration: Mapped[int]
     media_type: Mapped[str]
+    nsfw: Mapped[bool]
+    added_by: Mapped[Annotated[UUID, "foreign key to UserOrm from User Service"]]
 
     tags: Mapped[list["TagOrm"]] = relationship(
         secondary="a_videos_tags",
@@ -97,6 +131,13 @@ class VideoOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
         secondary="a_videos_roles",
         back_populates="videos"
     )
+    title: Mapped["TitleOrm"] = relationship(back_populates="videos")
+    author: Mapped["AuthorOrm"] = relationship(back_populates="videos")
+    language: Mapped["LanguageOrm"] = relationship(back_populates="videos")
+
+    author_uid: Mapped[UUID] = mapped_column(ForeignKey("authors.uid"))
+    title_pk: Mapped[int | None] = mapped_column(ForeignKey("titles.pk"))
+    language_pk: Mapped[int] = mapped_column(ForeignKey("languages"))
 
 
 class PageOrm(BaseOrm, IntPkMixin):

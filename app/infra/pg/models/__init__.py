@@ -1,10 +1,17 @@
-from .base import BaseOrm
-from .common import (
-    TagOrm,
+from .common.base import BaseOrm
+from .role import (
+    RoleOrm,
     GifsRolesOrm,
     ImagesRolesOrm,
     MangasRolesOrm,
     VideosRolesOrm
+)
+from .tag import (
+    TagOrm,
+    ImagesTagsOrm,
+    MangasTagsOrm,
+    VideosTagsOrm,
+    GifsTagsOrm,
 )
 from .content import (
     MangaOrm,
@@ -17,11 +24,16 @@ from .content import (
 
 __all__ = (
     "BaseOrm",
-    "TagOrm",
+    "RoleOrm",
     "GifsRolesOrm",
     "ImagesRolesOrm",
     "MangasRolesOrm",
     "VideosRolesOrm",
+    "TagOrm",
+    "ImagesTagsOrm",
+    "MangasTagsOrm",
+    "VideosTagsOrm",
+    "GifsTagsOrm",
     "MangaOrm",
     "ImageOrm",
     "GifOrm",
