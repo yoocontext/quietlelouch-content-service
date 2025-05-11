@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from uuid import UUID
+from typing import Any
 
 from botocore.exceptions import ClientError
 
@@ -10,6 +11,7 @@ from infra.s3.base import (
     S3GetObjectResponse,
     S3PutObjectResponse,
     S3ListObjectsV2Response,
+    S3UploadFileObjResponse,
 )
 from infra.s3.exceptions import ContentNotExistsException
 
@@ -33,14 +35,29 @@ class BotoClient:
         self,
         content_uid: UUID,
         body: bytes,
-        content_type: ContentType
+        content_type: MediaType,
     ) -> S3PutObjectResponse:
         response: dict = await self.client.put_object(
             Bucket=self.bucket_name,
             Key=str(content_uid),
             Body=body,
+            ContentType=content_type.value,
         )
         return self._map_put_object(response)
+
+    async def upload_fileobj(
+        self,
+        content_uid: UUID,
+        fileobj: Any,
+        content_type: MediaType,
+    ) -> S3UploadFileObjResponse:
+        await self.client.upload_fileobj(
+            Fileobj=fileobj,
+            Bucket=self.bucket_name,
+            Key=str(content_uid),
+            ExtraArgs={"ContentType": content_type.value},
+        )
+        return S3UploadFileObjResponse()
 
     async def delete_content(self, content_uid: UUID) -> S3DeleteObjectResponse:
         try:

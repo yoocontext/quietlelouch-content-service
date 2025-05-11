@@ -8,7 +8,10 @@ from aiobotocore.response import StreamingBody
 @runtime_checkable
 class AsyncS3ClientProtocol(Protocol):
     async def get_object(self, *, Bucket: str, Key: str) -> dict: ...
-    async def put_object(self, *, Bucket: str, Key: str, Body: Any) -> dict: ...
+    async def put_object(self, *, Bucket: str, Key: str, Body: Any, ContentType: str | None) -> dict: ...
+    async def upload_fileobj(
+            self, Fileobj: Any, Bucket: str, Key: str, ExtraArgs: Optional[dict[str, Any]] = ...
+    ) -> None: ...
     async def delete_object(self, *, Bucket: str, Key: str) -> dict: ...
     async def list_objects_v2(self, *, Bucket: str, Prefix: str = ...) -> dict: ...
 
@@ -32,6 +35,12 @@ class S3PutObjectResponse:
     version_id: Optional[str] = None
     server_side_encryption: Optional[str] = None
 
+
+# New response for upload_fileobj
+@dataclass
+class S3UploadFileObjResponse:
+    status: str = "success"
+
 @dataclass
 class S3DeleteObjectResponse:
     delete_marker: Optional[bool] = None
@@ -51,3 +60,4 @@ class S3ListObjectsV2Response:
     next_continuation_token: Optional[str] = None
     prefix: Optional[str] = None
     start_after: Optional[str] = None
+
