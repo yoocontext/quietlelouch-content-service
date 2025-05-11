@@ -1,4 +1,13 @@
+from .author import AuthorOrm
 from .common.base import BaseOrm
+from .content import (
+    MangaOrm,
+    ImageOrm,
+    GifOrm,
+    VideoOrm,
+    PageOrm,
+)
+from .language import LanguageOrm
 from .role import (
     RoleOrm,
     GifsRolesOrm,
@@ -13,17 +22,18 @@ from .tag import (
     VideosTagsOrm,
     GifsTagsOrm,
 )
-from .content import (
-    MangaOrm,
-    ImageOrm,
-    GifOrm,
-    VideoOrm,
-    PageOrm,
-)
+from .title import TitleOrm
 
 
 __all__ = (
+    "AuthorOrm",
     "BaseOrm",
+    "MangaOrm",
+    "ImageOrm",
+    "GifOrm",
+    "VideoOrm",
+    "PageOrm",
+    "LanguageOrm",
     "RoleOrm",
     "GifsRolesOrm",
     "ImagesRolesOrm",
@@ -34,9 +44,5 @@ __all__ = (
     "MangasTagsOrm",
     "VideosTagsOrm",
     "GifsTagsOrm",
-    "MangaOrm",
-    "ImageOrm",
-    "GifOrm",
-    "VideoOrm",
-    "PageOrm",
+    "TitleOrm",
 )
