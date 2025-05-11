@@ -147,6 +147,7 @@ class PageOrm(BaseOrm, IntPkMixin):
     height: Mapped[int]
     weight: Mapped[int]
     size: Mapped[int]
+    page_number: Mapped[int]
 
     manga: Mapped["MangaOrm"] = relationship(back_populates="pages")
 
