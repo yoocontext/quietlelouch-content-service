@@ -11,7 +11,7 @@ from infra.pg.models.common.mixins import IntPkMixin
 class RoleOrm(BaseOrm, IntPkMixin):
     __tablename__ = "roles"
 
-    name: Mapped[str]
+    name: Mapped[str] = mapped_column(unique=True)
     description: Mapped[str | None]
 
     mangas: Mapped[list["MangaOrm"]] = relationship(

@@ -17,9 +17,9 @@ class MinioException(InfraException):
 
 
 @dataclass
-class ContentNotExistsException(MinioException):
+class ContentNotExistException(MinioException):
     content_uid: UUID
 
     @property
     def message(self) -> str:
-        return fr"Content {self.content_uid} not exists"
+        return fr"Content {self.content_uid} not exist"

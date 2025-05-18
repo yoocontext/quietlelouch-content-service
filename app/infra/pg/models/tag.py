@@ -10,7 +10,7 @@ from infra.pg.models.common.mixins import IntPkMixin, CreateAtMixin, UpdateAtMix
 class TagOrm(BaseOrm, IntPkMixin, CreateAtMixin, UpdateAtMixin):
     __tablename__ = "tags"
 
-    title: Mapped[str]
+    name: Mapped[str] = mapped_column(unique=True)
     description: Mapped[str | None]
 
     mangas: Mapped[list["MangaOrm"]] = relationship(

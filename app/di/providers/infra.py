@@ -58,4 +58,10 @@ class Boto3Provider(Provider):
             endpoint_url=settings.minio.endpoint_url,
         ) as client:
             yield client
-t
+
+    @provide(scope=Scope.REQUEST)
+    def create_boto_client(self, boto3_client: AsyncS3ClientProtocol) -> BotoClient:
+        client = BotoClient(
+            client=boto3_client,
+        )
+        return client
