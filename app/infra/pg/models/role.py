@@ -5,10 +5,10 @@ from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from infra.pg.models import BaseOrm
 from infra.pg.models.content import MangaOrm, ImageOrm, GifOrm, VideoOrm
-from infra.pg.models.common.mixins import IntPkMixin
+from infra.pg.models.common.mixins import UidPkMixin, IntPkMixin
 
 
-class RoleOrm(BaseOrm, IntPkMixin):
+class RoleOrm(BaseOrm, UidPkMixin):
     __tablename__ = "roles"
 
     name: Mapped[str] = mapped_column(unique=True)

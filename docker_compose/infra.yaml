@@ -1,0 +1,36 @@
+services:
+  postgres_content:
+    image: postgres:16-alpine
+    container_name: pg_content
+    env_file:
+      - ../.dev.env
+    ports:
+      - "45434:${POSTGRES_PORT}"
+    volumes:
+      - pgdata_content:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  pgadmin_content:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_content
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres_content
+    volumes:
+      - pgadmin_content:/var/lib/pgadmin
+    networks:
+      - backend
+
+volumes:
+  pgdata_content:
+  pgadmin_content:
+  redis_content:
+
+networks:
+  backend:
+    driver: bridge
