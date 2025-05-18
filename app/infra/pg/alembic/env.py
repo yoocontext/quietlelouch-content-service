@@ -26,6 +26,8 @@ if config.config_file_name is not None:
 target_metadata = BaseOrm.metadata
 
 settings = get_settings()
+print("bob3")
+print(settings.pg.postgres_url)
 config.set_main_option("sqlalchemy.url", settings.pg.postgres_url)
 
 # other values from the config, defined by the needs of env.py,

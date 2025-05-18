@@ -3,7 +3,8 @@ from uuid import UUID
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from infra.pg.models import BaseOrm, MangaOrm, ImageOrm, GifOrm, VideoOrm
+from infra.pg.models.common.base import BaseOrm
+from infra.pg.models.content import MangaOrm, ImageOrm, GifOrm, VideoOrm
 from infra.pg.models.common.mixins import IntPkMixin, CreateAtMixin, UpdateAtMixin
 
 

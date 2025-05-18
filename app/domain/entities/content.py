@@ -49,13 +49,15 @@ class Page(BaseEntity):
     pass
 
 
+@dataclass(kw_only=True)
+class Tag(BaseEntity):
+    name: NameValue
+    description: DescriptionValue | None = None
+
+
 class MediaType(Enum):
     JPEG = "image/jpeg"
     PNG = "image/png"
     GIF = "image/gif"
     MP4 = "video/mp4"
 
-
-class Tag(BaseEntity):
-    name: NameValue
-    description: DescriptionValue | None = None

@@ -4,20 +4,19 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from infra.pg.models.author import AuthorOrm
 from infra.pg.models.common.base import BaseOrm
 from infra.pg.models.common.mixins import (
     UidPkMixin,
     CreateAtMixin,
     UpdateAtMixin,
 )
-from infra.pg.models.title import TitleOrm
-from infra.pg.types import UserUid, SizeInBytes
 
 if TYPE_CHECKING:
+    from .author import AuthorOrm
     from .language import LanguageOrm
     from .role import RoleOrm
     from .tag import TagOrm
+    from .title import TitleOrm
 
 
 class MangaOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
@@ -28,8 +27,8 @@ class MangaOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
     pages_count: Mapped[int]
     media_type: Mapped[str]
     nsfw: Mapped[bool]
-    added_by: Mapped[UserUid]
-    translated_by: Mapped[UserUid | None]
+    added_by: Mapped[UUID] = mapped_column(comment="foreign key to UserOrm from User Service")
+    translated_by: Mapped[UUID | None] = mapped_column(comment="foreign key to UserOrm from User Service")
 
     tags: Mapped[list["TagOrm"]] = relationship(
         secondary="a_mangas_tags",
@@ -56,10 +55,10 @@ class ImageOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
     description: Mapped[str | None]
     height: Mapped[int]
     width: Mapped[int]
-    size: Mapped[SizeInBytes]
+    size: Mapped[int]
     media_type: Mapped[str]
     nsfw: Mapped[bool]
-    added_by: Mapped[UserUid]
+    added_by: Mapped[UUID] = mapped_column(comment="foreign key to UserOrm from User Service")
 
     tags: Mapped[list["TagOrm"]] = relationship(
         secondary="a_images_tags",
@@ -75,7 +74,7 @@ class ImageOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
 
     author_uid: Mapped[UUID | None] = mapped_column(ForeignKey("authors.uid"))
     title_pk: Mapped[int | None] = mapped_column(ForeignKey("titles.pk"))
-    language_pk: Mapped[int] = mapped_column(ForeignKey("languages"))
+    language_pk: Mapped[int] = mapped_column(ForeignKey("languages.pk"))
 
 
 class GifOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
@@ -85,11 +84,11 @@ class GifOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
     description: Mapped[str | None]
     height: Mapped[int]
     width: Mapped[int]
-    size: Mapped[SizeInBytes]
+    size: Mapped[int]
     duration: Mapped[int]
     media_type: Mapped[str]
     nsfw: Mapped[bool]
-    added_by: Mapped[UserUid]
+    added_by: Mapped[UUID] = mapped_column(comment="foreign key to UserOrm from User Service")
 
     tags: Mapped[list["TagOrm"]] = relationship(
         secondary="a_gifs_tags",
@@ -105,7 +104,7 @@ class GifOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
 
     author_uid: Mapped[UUID | None] = mapped_column(ForeignKey("authors.uid"))
     title_pk: Mapped[int | None] = mapped_column(ForeignKey("titles.pk"))
-    language_pk: Mapped[int] = mapped_column(ForeignKey("languages"))
+    language_pk: Mapped[int] = mapped_column(ForeignKey("languages.pk"))
 
 
 class VideoOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
@@ -115,11 +114,11 @@ class VideoOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
     description: Mapped[str | None]
     height: Mapped[int]
     width: Mapped[int]
-    size: Mapped[SizeInBytes]
+    size: Mapped[int]
     duration: Mapped[int]
     media_type: Mapped[str]
     nsfw: Mapped[bool]
-    added_by: Mapped[UserUid]
+    added_by: Mapped[UUID] = mapped_column(comment="foreign key to UserOrm from User Service")
 
     tags: Mapped[list["TagOrm"]] = relationship(
         secondary="a_videos_tags",
@@ -135,7 +134,7 @@ class VideoOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
 
     author_uid: Mapped[UUID | None] = mapped_column(ForeignKey("authors.uid"))
     title_pk: Mapped[int | None] = mapped_column(ForeignKey("titles.pk"))
-    language_pk: Mapped[int] = mapped_column(ForeignKey("languages"))
+    language_pk: Mapped[int] = mapped_column(ForeignKey("languages.pk"))
 
 
 class PageOrm(BaseOrm, UidPkMixin):
@@ -143,7 +142,7 @@ class PageOrm(BaseOrm, UidPkMixin):
 
     height: Mapped[int]
     width: Mapped[int]
-    size: Mapped[SizeInBytes]
+    size: Mapped[int]
     page_number: Mapped[int]
 
     manga: Mapped["MangaOrm"] = relationship(back_populates="pages")

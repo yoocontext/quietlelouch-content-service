@@ -4,8 +4,12 @@ services:
     container_name: pg_content
     env_file:
       - ../.dev.env
+    environment:
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     ports:
-      - "45434:${POSTGRES_PORT}"
+      - "45432:5432"
     volumes:
       - pgdata_content:/var/lib/postgresql/data
     networks:
