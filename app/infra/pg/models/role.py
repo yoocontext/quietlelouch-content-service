@@ -15,7 +15,7 @@ class RoleOrm(BaseOrm, UidPkMixin):
     description: Mapped[str | None]
 
     mangas: Mapped[list["MangaOrm"]] = relationship(
-        secondary="a_mangas_roles",
+        secondary="a_manga_roles",
         back_populates="access_roles",
     )
     images: Mapped[list["ImageOrm"]] = relationship(

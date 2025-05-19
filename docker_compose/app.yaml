@@ -1,0 +1,18 @@
+services:
+  auth_service:
+    container_name: content_service
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: content_service
+    env_file:
+      - ../.dev.env
+    ports:
+      - "8000:8000"
+    command: "uvicorn application.main:create_app --host 0.0.0.0 --factory"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

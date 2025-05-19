@@ -31,11 +31,11 @@ class MangaOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
     translated_by: Mapped[UUID | None] = mapped_column(comment="foreign key to UserOrm from User Service")
 
     tags: Mapped[list["TagOrm"]] = relationship(
-        secondary="a_mangas_tags",
+        secondary="a_manga_tags",
         back_populates="mangas",
     )
     access_roles: Mapped[list["RoleOrm"]] = relationship(
-        secondary="a_mangas_roles",
+        secondary="a_manga_roles",
         back_populates="mangas",
     )
     pages: Mapped[list["PageOrm"]] = relationship(back_populates="manga")

@@ -22,9 +22,14 @@ class ContentEntityMapper:
         media_type: str,
     ) -> Image:
         name_value: NameValue = self.values_mapper.get_name_value(name=name)
-        title_value: TitleValue = self.values_mapper.get_title_value(title=title)
-        description_value: DescriptionValue = self.values_mapper.get_description(description=description)
+        title_value: TitleValue | None = None
+        description_value: DescriptionValue | None = None
         media_type_value: MediaTypeValue = self.values_mapper.get_media_type(media_type=media_type)
+
+        if title:
+            title_value: TitleValue = self.values_mapper.get_title_value(title=title)
+        if description_value:
+            description_value = self.values_mapper.get_description(description=description)
 
         image = Image(
             name=name_value,

@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from uuid import UUID
 
 from domain.entities.content import Image
@@ -19,6 +20,7 @@ from infra.pg.mappers import (
 )
 
 
+@dataclass
 class ImageRepository(BaseRepository):
     tag_repository: TagRepository
     role_repository: RoleRepository
@@ -52,7 +54,6 @@ class ImageRepository(BaseRepository):
         image_orm = ImageOrm(
             name=image_schema.name,
             description=image_schema.description,
-            url=image_schema.url,
             height=image_schema.height,
             width=image_schema.width,
             size=image_schema.size,

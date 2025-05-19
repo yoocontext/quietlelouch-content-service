@@ -13,16 +13,14 @@ class ContentValuesMapper:
         return name_value
 
     @staticmethod
-    def get_title_value(title: str | None) -> TitleValue | None:
-        if title:
-            title_value = TitleValue(value=title)
-            return title_value
+    def get_title_value(title: str) -> TitleValue:
+        title_value = TitleValue(value=title)
+        return title_value
 
     @staticmethod
-    def get_description(description: str | None) -> DescriptionValue | None:
-        if description:
-            description = DescriptionValue(value=description)
-            return description
+    def get_description(description: str) -> DescriptionValue:
+        description = DescriptionValue(value=description)
+        return description
 
     @staticmethod
     def get_media_type(media_type: str) -> MediaTypeValue:

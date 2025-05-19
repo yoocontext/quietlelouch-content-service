@@ -18,7 +18,7 @@ class AsyncS3ClientProtocol(Protocol):
 
     async def list_objects_v2(self, *, Bucket: str, Prefix: str = ...) -> dict: ...
 
-    async def get_presigned_url(
+    async def generate_presigned_url(
             self,
             ClientMethod: str,
             Params: dict[str, Any],

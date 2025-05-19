@@ -10,7 +10,6 @@ class ImageCreateSchema:
     uid: UUID | None
     name: str
     description: str | None
-    url: str
     height: int
     width: int
     size: SizeInBytes

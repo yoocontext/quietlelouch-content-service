@@ -4,7 +4,8 @@ from uuid import UUID
 
 from fastapi import UploadFile # так делать прям оч точно нельзя, типа бизнес логика пиздец зависит от этой залупы
 
-from domain.entities.content import MediaType, Image
+from domain.entities.content import Image
+from domain.values.content import MediaType
 from domain.logic.use_cases import BaseUseCase, BaseCommand, BaseResult
 from domain.mappers.entities import ContentEntityMapper
 from infra.pg.repository.content.image import ImageRepository
@@ -63,22 +64,20 @@ class UploadImageUseCase(BaseUseCase):
             content_uid=image.uid,
             bucket_name=Bucket.IMAGE.value,
             fileobj=command.file,
-            content_type=media_type.value,
+            content_type=media_type,
         )
-        url: str = await self.s3_client.get_presigned_url(
+        url: str = await self.s3_client.generate_presigned_url(
             client_method=ClientMethod.GET_OBJECT.value,
             params={
                 'Bucket': Bucket.IMAGE.value,
-                'Key': image.uid,
+                'Key': str(image.uid),
             },
             http_method='GET'
         )
-
         image_schema = ImageCreateSchema(
             uid=image.uid,
             name=image.name.as_generic_type(),
-            description=image.description,
-            url=url,
+            description=command.description,
             height=image_metadata.height,
             width=image_metadata.width,
             size=command.file.size,
@@ -93,6 +92,7 @@ class UploadImageUseCase(BaseUseCase):
         )
 
         await self.image_repository.create(image_schema=image_schema)
+        await self.image_repository.session.commit()
 
         result = UploadImageResult(
             url=url,

@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from enum import Enum
 
 from .base import BaseEntity
 from domain.values.content import (
@@ -23,8 +22,8 @@ class Manga(BaseEntity):
 @dataclass(kw_only=True)
 class Image(BaseEntity):
     name: NameValue
-    title: TitleValue | None
-    description: DescriptionValue | None
+    title: TitleValue | None = None
+    description: DescriptionValue | None = None
     media_type: "MediaTypeValue"
 
 
@@ -53,11 +52,3 @@ class Page(BaseEntity):
 class Tag(BaseEntity):
     name: NameValue
     description: DescriptionValue | None = None
-
-
-class MediaType(Enum):
-    JPEG = "image/jpeg"
-    PNG = "image/png"
-    GIF = "image/gif"
-    MP4 = "video/mp4"
-

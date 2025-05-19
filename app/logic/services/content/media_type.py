@@ -1,4 +1,4 @@
-from domain.entities.content import MediaType
+from domain.values.content import MediaType
 from domain.logic.services import BaseService
 from domain.values.exceptions import MediaTypeNotExistException
 
@@ -15,14 +15,14 @@ class GetMediaTypeService(BaseService):
         return media_type
 
     @staticmethod
-    def _get_content_type(format_type: str) -> str:
+    def _get_content_type(format_type: str) -> str | None:
         format_type = format_type.lower()
-        content_type = None
 
-        if format_type in ("jpeg", "png", "gif"):
-            content_type = fr"image/{content_type}"
-        elif format_type in ("mp4",):
-            content_type = fr"video/{content_type}"
 
-        return content_type
+        if format_type == "jpg":
+            return "image/jpeg"
+        elif format_type in ("jpeg", "png", "gif"):
+            return f"image/{format_type}"
+        elif format_type == "mp4":
+            return f"video/{format_type}"
 

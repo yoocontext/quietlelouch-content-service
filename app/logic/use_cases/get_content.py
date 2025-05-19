@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from domain.entities.content import MediaType
+from domain.values.content import MediaType
 from domain.logic.use_cases import BaseUseCase, BaseCommand, BaseResult
 from infra.pg.repository.content.image import ImageRepository
 from infra.s3.base import S3GetObjectResponse

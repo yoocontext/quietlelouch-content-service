@@ -15,7 +15,7 @@ class TagOrm(BaseOrm, IntPkMixin, CreateAtMixin, UpdateAtMixin):
     description: Mapped[str | None]
 
     mangas: Mapped[list["MangaOrm"]] = relationship(
-        secondary="a_mangas_tags",
+        secondary="a_manga_tags",
         back_populates="tags",
     )
     images: Mapped[list["ImageOrm"]] = relationship(

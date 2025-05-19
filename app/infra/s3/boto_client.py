@@ -1,20 +1,20 @@
+import asyncio
 from dataclasses import dataclass
 from uuid import UUID
-from typing import BinaryIO, Annotated
+from typing import Annotated
 
 from botocore.exceptions import ClientError
 from fastapi import UploadFile
 
-from domain.entities.content import MediaType
+from domain.values.content import MediaType
 from infra.s3.base import (
     AsyncS3ClientProtocol,
     S3DeleteObjectResponse,
     S3GetObjectResponse,
     S3PutObjectResponse,
     S3ListObjectsV2Response,
-    S3UploadFileObjResponse, AsyncReadable,
+    S3UploadFileObjResponse,
 )
-from infra.s3.const import PresignedUrl
 from infra.s3.exceptions import ContentNotExistException
 
 
@@ -82,7 +82,7 @@ class BotoClient:
         )
         return self._map_list_objects(response)
 
-    async def get_presigned_url(
+    async def generate_presigned_url(
             self,
             client_method: str,
             params: dict[str, any],
@@ -90,11 +90,13 @@ class BotoClient:
             http_method: str | None = None,
     ) -> Annotated[str, "s3 url for download file"]:
 
-        url: str = await self.client.get_presigned_url(
-            ClientMethod=client_method,
-            Params=params,
-            ExpiresIn=expires,
-            HttpMethod=http_method,
+        url: str = await (
+            self.client.generate_presigned_url(
+                ClientMethod=client_method,
+                Params=params,
+                ExpiresIn=expires,
+                HttpMethod=http_method,
+            )
         )
         return url
 

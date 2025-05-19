@@ -1,4 +1,5 @@
-from uuid import UUID
+from uuid import UUID, uuid4
+import json
 
 from fastapi import (
     APIRouter,
@@ -6,6 +7,7 @@ from fastapi import (
     HTTPException,
     UploadFile,
     File,
+    Form,
     status,
 )
 from fastapi.responses import StreamingResponse
@@ -31,10 +33,16 @@ ALLOWED_TYPES = {"image/jpeg", "image/png"}
     status_code=status.HTTP_201_CREATED,
 )
 async def upload_image(
-    schema: ImageCreateInSchema,
+    schema: str = Form(...),
     file: UploadFile = File(...),
-    user_uid: UUID = Depends(...),
+    # user_uid: UUID = Depends(...),
 ) -> ImageCreateOutSchema:
+    user_uid = UUID("d6d7e017-48c7-4fda-b776-34ac8130ed73")
+
+    try:
+        schema_data = ImageCreateInSchema(**json.loads(schema))
+    except (json.JSONDecodeError, ValueError) as e:
+        raise HTTPException(status_code=400, detail="Invalid schema JSON") from e
     if file.content_type not in ALLOWED_TYPES:
         raise HTTPException(status_code=400, detail="Unsupported image type. Only JPEG and PNG are allowed.")
 
@@ -43,7 +51,7 @@ async def upload_image(
         mapper: CreateUploadCommandMapper = await cont.get(CreateUploadCommandMapper)
         use_case: UploadImageUseCase = await cont.get(UploadImageUseCase)
         command: UploadImageCommand = mapper.act(
-            create_schema=schema,
+            create_schema=schema_data,
             file=file,
             user_uid=user_uid,
         )

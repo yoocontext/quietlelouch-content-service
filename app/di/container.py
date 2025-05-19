@@ -7,6 +7,13 @@ from .providers import (
     FastStreamProvider,
     DatabaseProvider,
     Boto3Provider,
+    RepositoryProvider,
+    MappersDomainProvider,
+    MappersApplicationProvider,
+    ImageUseCaseProvider,
+    MetadataProvider,
+    MediaTypeProvider,
+    PgMapperProvider,
 )
 
 
@@ -17,5 +24,12 @@ def get_container() -> AsyncContainer:
         FastStreamProvider(),
         DatabaseProvider(),
         Boto3Provider(),
+        RepositoryProvider(),
+        MappersDomainProvider(),
+        MappersApplicationProvider(),
+        ImageUseCaseProvider(),
+        MetadataProvider(),
+        MediaTypeProvider(),
+        PgMapperProvider(),
     )
     return container

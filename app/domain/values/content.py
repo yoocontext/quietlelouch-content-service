@@ -1,8 +1,8 @@
 from dataclasses import dataclass
+from enum import Enum
 
-from .base import BaseValue, VT
+from .base import BaseValue
 from .exceptions import TextTooLongException, TextTooShortException, MediaTypeNotExistException
-from ..entities.content import MediaType
 
 
 @dataclass
@@ -57,6 +57,13 @@ class TitleValue(BaseValue[str, str]):
 
     def as_generic_type(self) -> str:
         return str(self.value)
+
+
+class MediaType(Enum):
+    JPEG = "image/jpeg"
+    PNG = "image/png"
+    GIF = "image/gif"
+    MP4 = "video/mp4"
 
 
 @dataclass
