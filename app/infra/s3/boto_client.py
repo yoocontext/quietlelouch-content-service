@@ -89,7 +89,6 @@ class BotoClient:
             expires: int = 3600,
             http_method: str | None = None,
     ) -> Annotated[str, "s3 url for download file"]:
-
         url: str = await (
             self.client.generate_presigned_url(
                 ClientMethod=client_method,

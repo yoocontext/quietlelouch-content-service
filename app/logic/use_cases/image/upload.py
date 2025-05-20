@@ -3,6 +3,7 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import UploadFile # так делать прям оч точно нельзя, типа бизнес логика пиздец зависит от этой залупы
+from faststream.rabbit import RabbitBroker
 
 from domain.entities.content import Image
 from domain.values.content import MediaType
@@ -10,10 +11,12 @@ from domain.logic.use_cases import BaseUseCase, BaseCommand, BaseResult
 from domain.mappers.entities import ContentEntityMapper
 from infra.pg.repository.content.image import ImageRepository
 from infra.pg.schemas.image import ImageCreateSchema
+from infra.rmq.events import ImageCreateEvent
+from infra.rmq.queues import CREATE_IMAGE
 from infra.s3.boto_client import BotoClient
 from infra.s3.const import Bucket, ClientMethod
 from logic.services.content.media_type import GetMediaTypeService
-from logic.services.content.metadata import GetPictureMetadataService, ImageMetadata
+from logic.services.content.metadata import GetPictureMetadataService, PictureMetadata
 
 
 @dataclass
@@ -46,11 +49,12 @@ class UploadImageUseCase(BaseUseCase):
     entity_mapper: ContentEntityMapper
     s3_client: BotoClient
     image_repository: ImageRepository
+    broker: RabbitBroker
 
     async def act(self, command: UploadImageCommand) -> UploadImageResult:
         # todo проверить юзер роли
 
-        image_metadata: ImageMetadata = await self.image_meta_service.act(file=command.file)
+        image_metadata: PictureMetadata = await self.image_meta_service.act(file=command.file)
         media_type: MediaType = await self.get_media_type_service.act(format_type=image_metadata.format)
 
         image: Image = self.entity_mapper.create_image(
@@ -101,4 +105,20 @@ class UploadImageUseCase(BaseUseCase):
             size=command.file.size,
             content_type=media_type.value
         )
+
+        event = ImageCreateEvent(
+            name=command.name,
+            description=command.description,
+            size=command.file.size,
+            media_type=media_type.value,
+            nsfw=command.nsfw,
+            added_by=command.user_uid,
+            tags=command.tags,
+            access_roles=command.access_roles,
+            title=command.title,
+            language=command.language,
+        )
+
+        await self.broker.publish(message=event, queue=CREATE_IMAGE)
+
         return result

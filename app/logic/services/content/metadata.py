@@ -11,7 +11,7 @@ from domain.logic.services import BaseService
 
 
 @dataclass
-class ImageMetadata:
+class PictureMetadata:
     width: int
     height: int
     format: str
@@ -20,16 +20,16 @@ class ImageMetadata:
 class GetPictureMetadataService(BaseService):
     """Работает с image and gif"""
 
-    async def act(self, file: UploadFile) -> ImageMetadata:
+    async def act(self, file: UploadFile) -> PictureMetadata:
         header: bytes = await self._get_header(file=file)
-        image: ImageFile = await asyncio.to_thread(self._get_image, header)
+        image: ImageFile = await asyncio.to_thread(self._get_image, header=header)
 
         width, height = image.size
         image_format: str = image.format
 
         file.file.seek(0)
 
-        resolution = ImageMetadata(width=width, height=height, format=image_format)
+        resolution = PictureMetadata(width=width, height=height, format=image_format)
         return resolution
 
     @staticmethod

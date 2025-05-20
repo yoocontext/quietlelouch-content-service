@@ -1,4 +1,5 @@
 from dishka import Provider, Scope, provide
+from faststream.rabbit import RabbitBroker
 
 from domain.mappers import ContentEntityMapper
 from infra.pg.repository import ImageRepository
@@ -17,6 +18,7 @@ class ImageUseCaseProvider(Provider):
         entity_mapper: ContentEntityMapper,
         s3_client: BotoClient,
         image_repository: ImageRepository,
+        broker: RabbitBroker,
     ) -> UploadImageUseCase:
         case = UploadImageUseCase(
             image_meta_service=image_meta_service,
@@ -24,5 +26,6 @@ class ImageUseCaseProvider(Provider):
             entity_mapper=entity_mapper,
             s3_client=s3_client,
             image_repository=image_repository,
+            broker=broker,
         )
         return case

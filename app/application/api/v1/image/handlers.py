@@ -33,18 +33,21 @@ ALLOWED_TYPES = {"image/jpeg", "image/png"}
     status_code=status.HTTP_201_CREATED,
 )
 async def upload_image(
-    schema: str = Form(...),
+    in_schema: str = Form(..., alias="schema"),
     file: UploadFile = File(...),
     # user_uid: UUID = Depends(...),
 ) -> ImageCreateOutSchema:
     user_uid = UUID("d6d7e017-48c7-4fda-b776-34ac8130ed73")
 
     try:
-        schema_data = ImageCreateInSchema(**json.loads(schema))
+        schema_data = ImageCreateInSchema(**json.loads(in_schema))
     except (json.JSONDecodeError, ValueError) as e:
-        raise HTTPException(status_code=400, detail="Invalid schema JSON") from e
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid schema JSON")
     if file.content_type not in ALLOWED_TYPES:
-        raise HTTPException(status_code=400, detail="Unsupported image type. Only JPEG and PNG are allowed.")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Unsupported image type. Only JPEG and PNG are allowed."
+        )
 
     container = get_container()
     async with container() as cont:
@@ -64,7 +67,6 @@ async def upload_image(
             size=result.size,
             content_type=result.content_type,
         )
-
 
 
 # @router.get(path="/{image_uid}/download", response_class=StreamingResponse)

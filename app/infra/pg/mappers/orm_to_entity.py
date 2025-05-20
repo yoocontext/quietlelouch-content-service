@@ -13,21 +13,21 @@ class ContentOrmToEntityMapper:
 
     def get_image(self, image_orm: ImageOrm) -> Image:
         name: NameValue = self.values_mapper.get_name_value(name=image_orm.name)
-        title: TitleValue | None = None
-        description: DescriptionValue | None = None
         media_type: MediaTypeValue = self.values_mapper.get_media_type(media_type=image_orm.media_type)
-        print("bob3")
-        print(image_orm.title)
+
+        title_value: TitleValue | None = None
+        description_value: DescriptionValue | None = None
+
         if image_orm.title:
-            title: TitleValue = self.values_mapper.get_title_value(title=image_orm.title.name)
+            title_value: TitleValue = self.values_mapper.get_title_value(title=image_orm.title.name)
         if image_orm.description:
-            description: DescriptionValue = self.values_mapper.get_description(description=image_orm.description)
+            description_value: DescriptionValue = self.values_mapper.get_description(description=image_orm.description)
 
         image = Image(
             uid=image_orm.uid,
             name=name,
-            title=title,
-            description=description,
+            title=title_value,
+            description=description_value,
             media_type=media_type,
         )
         return image

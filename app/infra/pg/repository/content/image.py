@@ -16,7 +16,6 @@ from infra.pg.repository.title import TitleRepository
 from infra.pg.schemas.image import ImageCreateSchema
 from infra.pg.mappers import (
     ContentOrmToEntityMapper,
-    ContentCreateSchemaToOrmMapper
 )
 
 
@@ -27,12 +26,12 @@ class ImageRepository(BaseRepository):
     title_repository: TitleRepository
     author_repository: AuthorRepository
     language_repository: LanguageRepository
-    schema_mapper: ContentCreateSchemaToOrmMapper
     orm_mapper: ContentOrmToEntityMapper
 
-    async def get_by_uid(self, uid: UUID) -> ImageOrm:
-        image: ImageOrm | None = await self.session.get(ImageOrm, uid)
-        if image:
+    async def get_by_uid(self, uid: UUID) -> Image:
+        image_orm: ImageOrm | None = await self.session.get(ImageOrm, uid)
+        if image_orm:
+            image: Image = self.orm_mapper.get_image(image_orm)
             return image
         else:
             raise ObjectNotFoundException(required_obj=uid)

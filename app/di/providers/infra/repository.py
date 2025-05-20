@@ -1,7 +1,7 @@
 from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from infra.pg.mappers import ContentCreateSchemaToOrmMapper, ContentOrmToEntityMapper
+from infra.pg.mappers import ContentOrmToEntityMapper
 from infra.pg.repository import (
     AuthorRepository,
     RoleRepository,
@@ -22,7 +22,6 @@ class RepositoryProvider(Provider):
         title_repository: TitleRepository,
         author_repository: AuthorRepository,
         language_repository: LanguageRepository,
-        schema_mapper: ContentCreateSchemaToOrmMapper,
         orm_mapper: ContentOrmToEntityMapper,
     ) -> ImageRepository:
         repo = ImageRepository(
@@ -32,7 +31,6 @@ class RepositoryProvider(Provider):
             title_repository=title_repository,
             author_repository=author_repository,
             language_repository=language_repository,
-            schema_mapper=schema_mapper,
             orm_mapper=orm_mapper,
         )
         return repo
