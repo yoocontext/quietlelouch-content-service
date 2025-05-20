@@ -11,7 +11,7 @@ from infra.pg.repository.common.base import BaseRepository
 from infra.pg.repository.language import LanguageRepository
 from infra.pg.repository.role import RoleRepository
 from infra.pg.repository.tag import TagRepository
-from infra.pg.repository.common.errors import ObjectNotFoundException
+from infra.pg.repository.common.exceptions import ObjectNotFoundException
 from infra.pg.repository.title import TitleRepository
 from infra.pg.schemas.image import ImageCreateSchema
 from infra.pg.mappers import (

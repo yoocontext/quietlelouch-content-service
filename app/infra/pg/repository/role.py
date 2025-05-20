@@ -2,7 +2,7 @@ from sqlalchemy import select
 
 from infra.pg.models import RoleOrm
 from infra.pg.repository.common.base import BaseRepository
-from infra.pg.repository.common.errors import MissingRequiredField
+from infra.pg.repository.common.exceptions import MissingRequiredFieldException
 
 
 class RoleRepository(BaseRepository):
@@ -18,4 +18,4 @@ class RoleRepository(BaseRepository):
         else:
             found_names = {tag.name for tag in roles}
             missing_names = names - found_names
-            raise MissingRequiredField(required_field=missing_names)
+            raise MissingRequiredFieldException(required_field=missing_names)

@@ -4,7 +4,7 @@ from sqlalchemy import select
 
 from infra.pg.models import TitleOrm
 from infra.pg.repository.common.base import BaseRepository
-from infra.pg.repository.common.errors import ObjectNotFoundException, MissingRequiredField
+from infra.pg.repository.common.exceptions import ObjectNotFoundException, MissingRequiredFieldException
 
 
 class TitleRepository(BaseRepository):
@@ -24,4 +24,4 @@ class TitleRepository(BaseRepository):
         if title_orm:
             return title_orm
         else:
-            raise MissingRequiredField(required_field=name)
+            raise MissingRequiredFieldException(required_field=name)

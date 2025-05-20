@@ -4,7 +4,7 @@ from infra.pg.models.content import (
     MangaOrm
 )
 from infra.pg.repository.common.base import BaseRepository
-from infra.pg.repository.common.errors import ObjectNotFoundException
+from infra.pg.repository.common.exceptions import ObjectNotFoundException
 
 
 class MangaRepository(BaseRepository):

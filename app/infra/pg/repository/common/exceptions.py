@@ -2,10 +2,10 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from uuid import UUID
 
-from domain.exceptions import ApplicationException
+from domain.exceptions import InfraException
 
 
-class BaseRepositoryException(ApplicationException):
+class BaseRepositoryException(InfraException):
     @property
     def message(self) -> str:
         return "Repository error"
@@ -21,7 +21,7 @@ class ObjectNotFoundException(BaseRepositoryException):
 
 
 @dataclass
-class MissingRequiredField(BaseRepositoryException):
+class MissingRequiredFieldException(BaseRepositoryException):
     required_field: str | Iterable
 
     @property

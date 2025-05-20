@@ -1,13 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from domain.exceptions import ApplicationException
-
-
-class InfraException(ApplicationException):
-    @property
-    def message(self) -> str:
-        return "Infra exception"
+from domain.exceptions import InfraException
 
 
 class MinioException(InfraException):

@@ -15,6 +15,12 @@ class DomainException(ApplicationException):
         return "Domain Exception"
 
 
+class InfraException(ApplicationException):
+    @property
+    @abstractmethod
+    def message(self) -> str:
+        return "Infra Exception"
+
 class ServiceException(ApplicationException):
     @property
     @abstractmethod
