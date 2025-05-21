@@ -1,4 +1,4 @@
-from domain.values.content import MediaType
+from domain.values.content.common import MediaType
 from domain.logic.services import BaseService
 from domain.values.exceptions import MediaTypeNotExistException
 

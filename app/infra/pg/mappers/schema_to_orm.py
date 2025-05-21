@@ -1,5 +1,4 @@
 from infra.pg.models import (
-    ImageOrm,
     TagOrm,
     RoleOrm,
     TitleOrm,
@@ -14,7 +13,6 @@ from infra.pg.schemas.create import (
     AuthorCreateSchema,
     LanguageCreateSchema,
 )
-from infra.pg.schemas.image import ImageCreateSchema
 
 
 class ContentCreateSchemaToOrmMapper:

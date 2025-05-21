@@ -6,7 +6,7 @@ from application.api.v1.schemas import (
     TagCreateSchema,
 )
 
-from logic.use_cases.image.schemas import (
+from logic.use_cases.schemas import (
     TitleCreateCaseSchema,
     AuthorCreateCaseSchema,
     LanguageCreateCaseSchema,

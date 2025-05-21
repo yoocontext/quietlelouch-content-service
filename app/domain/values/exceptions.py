@@ -36,3 +36,12 @@ class MediaTypeNotExistException(ValueException):
     @property
     def message(self) -> str:
         return f"Media type: {self.media_type} does not exist"
+
+
+@dataclass
+class ImageTooLargeError(ValueException):
+    size: float
+
+    @property
+    def message(self) -> str:
+        return f"The uploaded image exceeds the maximum allowed size of 13 MB. You image is: {self.size} MB"

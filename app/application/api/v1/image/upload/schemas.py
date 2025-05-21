@@ -3,7 +3,7 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 
 
-class ImageCreateInSchema(BaseModel):
+class CreateImageInSchema(BaseModel):
     name: str
     description: str | None = None
     nsfw: bool
@@ -14,7 +14,15 @@ class ImageCreateInSchema(BaseModel):
     language: Annotated[str | None, "language name"] = None
 
 
-class ImageCreateOutSchema(BaseModel):
+class CreateImageOutSchema(BaseModel):
+    url: str
+    width: int
+    height: int
+    size: int
+    content_type: str
+
+
+class GetImageOutSchema(BaseModel):
     url: str
     width: int
     height: int

@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+from sqlalchemy import select
+from sqlalchemy.orm import joinedload
+
 from domain.entities.content import Image
 from infra.pg.models import TagOrm, RoleOrm, TitleOrm, AuthorOrm, LanguageOrm
 from infra.pg.models.content import (
@@ -29,7 +32,15 @@ class ImageRepository(BaseRepository):
     orm_mapper: ContentOrmToEntityMapper
 
     async def get_by_uid(self, uid: UUID) -> Image:
-        image_orm: ImageOrm | None = await self.session.get(ImageOrm, uid)
+        result = await self.session.execute(
+            select(ImageOrm)
+            .where(ImageOrm.uid == uid)
+            .options(
+                joinedload(ImageOrm.title)
+            )
+        )
+        image_orm: ImageOrm | None = result.scalar_one_or_none()
+
         if image_orm:
             image: Image = self.orm_mapper.get_image(image_orm)
             return image

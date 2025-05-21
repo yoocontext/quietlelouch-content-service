@@ -1,12 +1,13 @@
 from dataclasses import dataclass
 
 from .base import BaseEntity
-from domain.values.content import (
+from domain.values.content.common import (
     NameValue,
     DescriptionValue,
     TitleValue,
     MediaTypeValue,
 )
+from ..values.content.image import ImageSizeValue
 
 
 @dataclass(kw_only=True)
@@ -14,7 +15,7 @@ class Manga(BaseEntity):
     name: NameValue
     title: TitleValue | None
     description: DescriptionValue | None
-    media_type: "MediaTypeValue"
+    media_type: MediaTypeValue
     pages: list["Page"]
     tags: list["Tag"]
 
@@ -24,7 +25,10 @@ class Image(BaseEntity):
     name: NameValue
     title: TitleValue | None = None
     description: DescriptionValue | None = None
-    media_type: "MediaTypeValue"
+    media_type: MediaTypeValue
+    size: ImageSizeValue
+    width: int
+    height: int
 
 
 @dataclass(kw_only=True)
@@ -32,7 +36,7 @@ class Gif(BaseEntity):
     name: NameValue
     title: TitleValue | None
     description: DescriptionValue | None
-    media_type: "MediaTypeValue"
+    media_type: MediaTypeValue
 
 
 @dataclass(kw_only=True)
@@ -40,7 +44,7 @@ class Video(BaseEntity):
     name: NameValue
     title: TitleValue | None
     description: DescriptionValue | None
-    media_type: "MediaTypeValue"
+    media_type: MediaTypeValue
 
 
 @dataclass(kw_only=True)

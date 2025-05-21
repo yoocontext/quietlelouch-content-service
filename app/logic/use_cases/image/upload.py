@@ -6,7 +6,7 @@ from fastapi import UploadFile # так делать прям оч точно н
 from faststream.rabbit import RabbitBroker
 
 from domain.entities.content import Image
-from domain.values.content import MediaType
+from domain.values.content.common import MediaType
 from domain.logic.use_cases import BaseUseCase, BaseCommand, BaseResult
 from domain.mappers.entities import ContentEntityMapper
 from infra.pg.repository.content.image import ImageRepository
@@ -62,6 +62,9 @@ class UploadImageUseCase(BaseUseCase):
             title=command.title,
             description=command.description,
             media_type=media_type.value,
+            size=command.file.size,
+            height=image_metadata.height,
+            width=image_metadata.width,
         )
 
         await self.s3_client.upload_fileobj(
