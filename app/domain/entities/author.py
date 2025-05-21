@@ -1,5 +1,5 @@
 from .base import BaseEntity
-from domain.values.author import NameAuthorValue, BioAuthorValue
+from ..values.content.common import NameAuthorValue, BioAuthorValue
 
 
 class Author(BaseEntity):

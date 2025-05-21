@@ -7,6 +7,7 @@ from infra.s3.boto_client import BotoClient
 from logic.services.content.media_type import GetMediaTypeService
 from logic.services.content.metadata import GetPictureMetadataService
 from logic.use_cases.image import UploadImageUseCase
+from logic.use_cases.image.get import GetImageUseCase
 
 
 class ImageUseCaseProvider(Provider):
@@ -27,5 +28,17 @@ class ImageUseCaseProvider(Provider):
             s3_client=s3_client,
             image_repository=image_repository,
             broker=broker,
+        )
+        return case
+
+    @provide(scope=Scope.REQUEST)
+    def create_get(
+        self,
+        s3_client: BotoClient,
+        image_repository: ImageRepository,
+    ) -> GetImageUseCase:
+        case = GetImageUseCase(
+            s3_client=s3_client,
+            image_repository=image_repository,
         )
         return case

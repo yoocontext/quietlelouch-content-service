@@ -1,4 +1,3 @@
-import asyncio
 from dataclasses import dataclass
 from uuid import UUID
 from typing import Annotated
@@ -6,7 +5,7 @@ from typing import Annotated
 from botocore.exceptions import ClientError
 from fastapi import UploadFile
 
-from domain.values.content import MediaType
+from domain.values.content.common import MediaType
 from infra.s3.base import (
     AsyncS3ClientProtocol,
     S3DeleteObjectResponse,

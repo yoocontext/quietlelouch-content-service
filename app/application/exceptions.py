@@ -6,6 +6,7 @@ from domain.values.exceptions import (
     MediaTypeNotExistException,
     TextTooLongException,
     TextTooShortException,
+    ImageTooLargeError,
 )
 from infra.pg.repository.common.exceptions import (
     ObjectNotFoundException,
@@ -18,6 +19,7 @@ from infra.s3.exceptions import (
 exceptions_map: dict[type[ApplicationException], int] = {
     MediaTypeNotExistException: HTTP_404_NOT_FOUND,
     TextTooShortException: HTTP_400_BAD_REQUEST,
+    ImageTooLargeError: HTTP_400_BAD_REQUEST,
     TextTooLongException: HTTP_400_BAD_REQUEST,
     ObjectNotFoundException: HTTP_404_NOT_FOUND,
     MissingRequiredFieldException: HTTP_404_NOT_FOUND,

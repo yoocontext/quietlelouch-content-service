@@ -2,14 +2,14 @@ from uuid import UUID
 
 from fastapi import UploadFile
 
-from application.api.v1.image.upload.schemas import ImageCreateInSchema
+from application.api.v1.image.upload.schemas import CreateImageInSchema
 from logic.use_cases.image import UploadImageCommand
 
 
 class CreateUploadCommandMapper:
     def act(
         self,
-        create_schema: ImageCreateInSchema,
+        create_schema: CreateImageInSchema,
         user_uid: UUID,
         file: UploadFile,
     ) -> UploadImageCommand:

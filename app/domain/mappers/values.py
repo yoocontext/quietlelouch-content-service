@@ -1,9 +1,10 @@
-from domain.values.content import (
+from domain.values.content.common import (
     NameValue,
     TitleValue,
     DescriptionValue,
     MediaTypeValue
 )
+from domain.values.content.image import ImageSizeValue
 
 
 class ContentValuesMapper:
@@ -26,3 +27,8 @@ class ContentValuesMapper:
     def get_media_type(media_type: str) -> MediaTypeValue:
         media_type_value = MediaTypeValue(value=media_type)
         return media_type_value
+
+    @staticmethod
+    def get_size(size: int) -> ImageSizeValue:
+        size_value = ImageSizeValue(value=size)
+        return size_value
