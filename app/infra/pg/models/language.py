@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Mapped, relationship
 
-from infra.pg.models import BaseOrm
+from infra.pg.models.common.base import BaseOrm
 from infra.pg.models.content import MangaOrm, ImageOrm, GifOrm, VideoOrm
 from infra.pg.models.common.mixins import IntPkMixin
 

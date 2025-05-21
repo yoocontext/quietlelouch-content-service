@@ -1,30 +1,33 @@
+import asyncio
 from dataclasses import dataclass
 from uuid import UUID
+from typing import Annotated
 
 from botocore.exceptions import ClientError
+from fastapi import UploadFile
 
-from domain.entities.content import MediaType
+from domain.values.content import MediaType
 from infra.s3.base import (
     AsyncS3ClientProtocol,
     S3DeleteObjectResponse,
     S3GetObjectResponse,
     S3PutObjectResponse,
     S3ListObjectsV2Response,
+    S3UploadFileObjResponse,
 )
-from infra.s3.exceptions import ContentNotExistsException
+from infra.s3.exceptions import ContentNotExistException
 
 
 @dataclass
 class BotoClient:
     client: AsyncS3ClientProtocol
-    bucket_name: str
 
-    async def get_content(self, content_uid: UUID) -> S3GetObjectResponse:
+    async def get_content(self, content_uid: UUID, bucket_name: str) -> S3GetObjectResponse:
         try:
-            response: dict = await self.client.get_object(Bucket=self.bucket_name, Key=str(content_uid))
+            response: dict = await self.client.get_object(Bucket=bucket_name, Key=str(content_uid))
         except ClientError as err:
             if err.response["Error"]["Code"] == "NoSuchKey":
-                raise ContentNotExistsException(content_uid=content_uid)
+                raise ContentNotExistException(content_uid=content_uid)
             else:
                 raise
         return self._map_get_object(response)
@@ -32,35 +35,69 @@ class BotoClient:
     async def put_content(
         self,
         content_uid: UUID,
+        bucket_name: str,
         body: bytes,
-        content_type: ContentType
+        content_type: MediaType,
     ) -> S3PutObjectResponse:
         response: dict = await self.client.put_object(
-            Bucket=self.bucket_name,
+            Bucket=bucket_name,
             Key=str(content_uid),
             Body=body,
+            ContentType=content_type.value,
         )
         return self._map_put_object(response)
 
-    async def delete_content(self, content_uid: UUID) -> S3DeleteObjectResponse:
+    async def upload_fileobj(
+        self,
+        content_uid: UUID,
+        bucket_name: str,
+        fileobj: UploadFile,
+        content_type: MediaType,
+    ) -> S3UploadFileObjResponse:
+        await self.client.upload_fileobj(
+            Fileobj=fileobj,
+            Bucket=bucket_name,
+            Key=str(content_uid),
+            ExtraArgs={"ContentType": content_type.value},
+        )
+        return S3UploadFileObjResponse()
+
+    async def delete_content(self, content_uid: UUID, bucket_name: str) -> S3DeleteObjectResponse:
         try:
             response: dict = await self.client.delete_object(
-                Bucket=self.bucket_name,
+                Bucket=bucket_name,
                 Key=str(content_uid),
             )
         except ClientError as err:
             if err.response["Error"]["Code"] == "NoSuchKey":
-                raise ContentNotExistsException(content_uid=content_uid)
+                raise ContentNotExistException(content_uid=content_uid)
             else:
                 raise
         return self._map_delete_object(response)
 
-    async def list_contents(self, prefix: str) -> S3ListObjectsV2Response:
+    async def list_contents(self, prefix: str, bucket_name: str) -> S3ListObjectsV2Response:
         response: dict = await self.client.list_objects_v2(
-            Bucket=self.bucket_name,
+            Bucket=bucket_name,
             Prefix=prefix,
         )
         return self._map_list_objects(response)
+
+    async def generate_presigned_url(
+            self,
+            client_method: str,
+            params: dict[str, any],
+            expires: int = 3600,
+            http_method: str | None = None,
+    ) -> Annotated[str, "s3 url for download file"]:
+        url: str = await (
+            self.client.generate_presigned_url(
+                ClientMethod=client_method,
+                Params=params,
+                ExpiresIn=expires,
+                HttpMethod=http_method,
+            )
+        )
+        return url
 
     @staticmethod
     def _map_get_object(data: dict) -> S3GetObjectResponse:

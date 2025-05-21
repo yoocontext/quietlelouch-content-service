@@ -10,7 +10,7 @@ from di import get_container
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    container: AsyncContainer = await get_container()
+    container: AsyncContainer = get_container()
     async with container() as cont:
         broker: RabbitBroker = await cont.get(RabbitBroker)
         broker.include_router(router)

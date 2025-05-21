@@ -7,15 +7,29 @@ from .providers import (
     FastStreamProvider,
     DatabaseProvider,
     Boto3Provider,
+    RepositoryProvider,
+    MappersDomainProvider,
+    MappersApplicationProvider,
+    ImageUseCaseProvider,
+    MetadataProvider,
+    MediaTypeProvider,
+    PgMapperProvider,
 )
 
 
 @lru_cache(1)
-async def get_container() -> AsyncContainer:
+def get_container() -> AsyncContainer:
     container: AsyncContainer = make_async_container(
         SettingsProvider(),
         FastStreamProvider(),
         DatabaseProvider(),
         Boto3Provider(),
+        RepositoryProvider(),
+        MappersDomainProvider(),
+        MappersApplicationProvider(),
+        ImageUseCaseProvider(),
+        MetadataProvider(),
+        MediaTypeProvider(),
+        PgMapperProvider(),
     )
     return container

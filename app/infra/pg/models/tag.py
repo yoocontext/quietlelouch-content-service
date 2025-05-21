@@ -3,18 +3,19 @@ from uuid import UUID
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from infra.pg.models import BaseOrm, MangaOrm, ImageOrm, GifOrm, VideoOrm
+from infra.pg.models.common.base import BaseOrm
+from infra.pg.models.content import MangaOrm, ImageOrm, GifOrm, VideoOrm
 from infra.pg.models.common.mixins import IntPkMixin, CreateAtMixin, UpdateAtMixin
 
 
 class TagOrm(BaseOrm, IntPkMixin, CreateAtMixin, UpdateAtMixin):
     __tablename__ = "tags"
 
-    title: Mapped[str]
+    name: Mapped[str] = mapped_column(unique=True)
     description: Mapped[str | None]
 
     mangas: Mapped[list["MangaOrm"]] = relationship(
-        secondary="a_mangas_tags",
+        secondary="a_manga_tags",
         back_populates="tags",
     )
     images: Mapped[list["ImageOrm"]] = relationship(

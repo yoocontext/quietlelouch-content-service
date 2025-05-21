@@ -1,13 +1,10 @@
 from uuid import UUID
 
 from infra.pg.models.content import (
-    MangaOrm,
-    ImageOrm,
-    GifOrm,
-    VideoOrm
+    MangaOrm
 )
-from infra.pg.repository.base import BaseRepository
-from infra.pg.repository.errors import ObjectNotFoundException
+from infra.pg.repository.common.base import BaseRepository
+from infra.pg.repository.common.exceptions import ObjectNotFoundException
 
 
 class MangaRepository(BaseRepository):

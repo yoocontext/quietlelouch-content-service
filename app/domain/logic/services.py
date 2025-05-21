@@ -1,2 +1,5 @@
-class BaseService:
-    ...
+from abc import ABC
+
+
+class BaseService(ABC):
+     ...

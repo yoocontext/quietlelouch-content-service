@@ -1,13 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from domain.exceptions import ApplicationException
-
-
-class InfraException(ApplicationException):
-    @property
-    def message(self) -> str:
-        return "Infra exception"
+from domain.exceptions import InfraException
 
 
 class MinioException(InfraException):
@@ -17,9 +11,9 @@ class MinioException(InfraException):
 
 
 @dataclass
-class ContentNotExistsException(MinioException):
+class ContentNotExistException(MinioException):
     content_uid: UUID
 
     @property
     def message(self) -> str:
-        return fr"Content {self.content_uid} not exists"
+        return fr"Content {self.content_uid} not exist"

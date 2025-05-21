@@ -1,65 +1,54 @@
 from dataclasses import dataclass
-from enum import Enum
 
 from .base import BaseEntity
+from domain.values.content import (
+    NameValue,
+    DescriptionValue,
+    TitleValue,
+    MediaTypeValue,
+)
 
 
 @dataclass(kw_only=True)
 class Manga(BaseEntity):
-    title: str
-    media_type: "MediaType"
-    pages_count: int
+    name: NameValue
+    title: TitleValue | None
+    description: DescriptionValue | None
+    media_type: "MediaTypeValue"
     pages: list["Page"]
     tags: list["Tag"]
 
 
 @dataclass(kw_only=True)
 class Image(BaseEntity):
-    title: str
-    url: str
-    height: int
-    weight: int
-    size: int
-    media_type: "MediaType"
+    name: NameValue
+    title: TitleValue | None = None
+    description: DescriptionValue | None = None
+    media_type: "MediaTypeValue"
 
 
 @dataclass(kw_only=True)
 class Gif(BaseEntity):
-    title: str
-    url: str
-    height: int
-    weight: int
-    size: int
-    duration: int
-    media_type: "MediaType"
+    name: NameValue
+    title: TitleValue | None
+    description: DescriptionValue | None
+    media_type: "MediaTypeValue"
 
 
 @dataclass(kw_only=True)
 class Video(BaseEntity):
-    title: str
-    url: str
-    height: int
-    weight: int
-    size: int
-    duration: int
-    media_type: "MediaType"
+    name: NameValue
+    title: TitleValue | None
+    description: DescriptionValue | None
+    media_type: "MediaTypeValue"
 
 
 @dataclass(kw_only=True)
 class Page(BaseEntity):
-    url: str
-    height: int
-    weight: int
-    size: int
+    pass
 
 
-class MediaType(Enum):
-    JPEG = "image/jpeg"
-    PNG = "image/png"
-    GIF = "image/gif"
-    MP4 = "video/mp4"
-
-
+@dataclass(kw_only=True)
 class Tag(BaseEntity):
-    name: str
-    description: str | None = None
+    name: NameValue
+    description: DescriptionValue | None = None

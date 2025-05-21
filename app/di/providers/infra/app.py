@@ -51,7 +51,8 @@ class Boto3Provider(Provider):
 
     @provide(scope=Scope.REQUEST)
     async def create_client(self, session: Session, settings: CommonSettings) -> AsyncIterable[AsyncS3ClientProtocol]:
-        async with session.client(service_name="s3",
+        async with session.client(
+            service_name="s3",
             aws_access_key_id=settings.minio.aws_access_key_id,
             aws_secret_access_key=settings.minio.aws_secret_access_key,
             endpoint_url=settings.minio.endpoint_url,
@@ -62,6 +63,5 @@ class Boto3Provider(Provider):
     def create_boto_client(self, boto3_client: AsyncS3ClientProtocol) -> BotoClient:
         client = BotoClient(
             client=boto3_client,
-            bucket_name="content",
         )
         return client
