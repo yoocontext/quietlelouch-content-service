@@ -13,4 +13,4 @@ class ImageCreateEvent(BaseModel):
     tags: set[str]
     access_roles: set[str]
     title: str | None
-    language: str
+    language: str | None

@@ -18,7 +18,6 @@ class NameAuthorValue(BaseValue[str, str]):
 
         if len_value < self.min_len:
             raise TextTooShortException(text=self.value, min_len=self.min_len)
-
         if len_value > self.max_len:
             raise TextTooLongException(text=self.value, max_len=self.max_len)
 
@@ -36,7 +35,6 @@ class BioAuthorValue(BaseValue[str, str]):
 
         if len_value < self.min_len:
             raise TextTooShortException(text=self.value, min_len=self.min_len)
-
         if len_value > self.max_len:
             raise TextTooLongException(text=self.value, max_len=self.max_len)
 

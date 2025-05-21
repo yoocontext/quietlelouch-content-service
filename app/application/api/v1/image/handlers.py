@@ -33,9 +33,9 @@ ALLOWED_TYPES = {"image/jpeg", "image/png"}
     status_code=status.HTTP_201_CREATED,
 )
 async def upload_image(
-    in_schema: str = Form(..., alias="schema"),
+    in_schema: str = Form(..., alias="in_schema"),
     file: UploadFile = File(...),
-    # user_uid: UUID = Depends(...),
+    # user_uid: UUID = Depends(auth_by_token),
 ) -> ImageCreateOutSchema:
     user_uid = UUID("d6d7e017-48c7-4fda-b776-34ac8130ed73")
 

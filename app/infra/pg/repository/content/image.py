@@ -40,15 +40,17 @@ class ImageRepository(BaseRepository):
     async def create(self, image_schema: ImageCreateSchema) -> Image:
         tags_orm: list[TagOrm] = await self.tag_repository.get_by_names(names=image_schema.tags)
         access_roles_orm: list[RoleOrm] = await self.role_repository.get_by_names(names=image_schema.access_roles)
-        language_orm: LanguageOrm = await self.language_repository.get_by_name(name=image_schema.language)
 
         title_orm: TitleOrm | None = None
         author_orm: AuthorOrm | None = None
+        language_orm: LanguageOrm | None = None
 
         if image_schema.title:
             title_orm: TitleOrm = await self.title_repository.get_by_name(name=image_schema.title)
         if image_schema.author:
             author_orm: AuthorOrm = await self.author_repository.get_by_name(name=image_schema.author)
+        if image_schema.language:
+            language_orm: LanguageOrm = await self.language_repository.get_by_name(name=image_schema.language)
 
         image_orm = ImageOrm(
             name=image_schema.name,

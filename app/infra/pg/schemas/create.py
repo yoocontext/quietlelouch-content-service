@@ -20,7 +20,7 @@ class MangaCreateSchema:
     pages: list["PageCreateSchema"]
     title: Optional["TitleCreateSchema"]
     author: Optional["AuthorCreateSchema"]
-    language: "LanguageCreateSchema"
+    language: Optional["LanguageCreateSchema"]
 
 
 @dataclass

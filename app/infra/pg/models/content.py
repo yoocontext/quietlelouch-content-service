@@ -74,7 +74,7 @@ class ImageOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
 
     author_uid: Mapped[UUID | None] = mapped_column(ForeignKey("authors.uid"))
     title_pk: Mapped[int | None] = mapped_column(ForeignKey("titles.pk"))
-    language_pk: Mapped[int] = mapped_column(ForeignKey("languages.pk"))
+    language_pk: Mapped[int | None] = mapped_column(ForeignKey("languages.pk"))
 
 
 class GifOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
@@ -104,7 +104,7 @@ class GifOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
 
     author_uid: Mapped[UUID | None] = mapped_column(ForeignKey("authors.uid"))
     title_pk: Mapped[int | None] = mapped_column(ForeignKey("titles.pk"))
-    language_pk: Mapped[int] = mapped_column(ForeignKey("languages.pk"))
+    language_pk: Mapped[int | None] = mapped_column(ForeignKey("languages.pk"))
 
 
 class VideoOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
@@ -134,7 +134,7 @@ class VideoOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
 
     author_uid: Mapped[UUID | None] = mapped_column(ForeignKey("authors.uid"))
     title_pk: Mapped[int | None] = mapped_column(ForeignKey("titles.pk"))
-    language_pk: Mapped[int] = mapped_column(ForeignKey("languages.pk"))
+    language_pk: Mapped[int | None] = mapped_column(ForeignKey("languages.pk"))
 
 
 class PageOrm(BaseOrm, UidPkMixin):
