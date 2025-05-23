@@ -1,4 +1,5 @@
 from typing import Annotated
+from uuid import UUID
 
 from pydantic import BaseModel, Field
 
@@ -15,6 +16,7 @@ class CreateImageInSchema(BaseModel):
 
 
 class CreateImageOutSchema(BaseModel):
+    uid: UUID
     url: str
     width: int
     height: int

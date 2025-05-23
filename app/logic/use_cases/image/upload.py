@@ -35,6 +35,7 @@ class UploadImageCommand(BaseCommand):
 
 @dataclass
 class UploadImageResult(BaseResult):
+    uid: UUID
     url: str
     width: int
     height: int
@@ -102,6 +103,7 @@ class UploadImageUseCase(BaseUseCase):
         await self.image_repository.session.commit()
 
         result = UploadImageResult(
+            uid=image.uid,
             url=url,
             width=image_metadata.width,
             height=image_metadata.height,

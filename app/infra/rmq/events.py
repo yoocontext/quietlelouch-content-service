@@ -15,3 +15,7 @@ class ImageCreateEvent(BaseModel):
     access_roles: set[str]
     title: str | None
     language: str | None
+
+
+class ImageDeleteEvent(BaseModel):
+    uid: UUID

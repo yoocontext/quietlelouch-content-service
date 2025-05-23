@@ -6,6 +6,7 @@ from fastapi import (
     Depends,
     HTTPException,
     UploadFile,
+    Response,
     File,
     Form,
     status,
@@ -14,6 +15,7 @@ from fastapi import (
 from application.api.v1.image.upload.mappers import CreateUploadCommandMapper
 from application.api.v1.image.upload.schemas import CreateImageInSchema, CreateImageOutSchema, GetImageOutSchema
 from di import get_container
+from logic.use_cases.image.delete import DeleteImageUseCase, DeleteImageCommand
 from logic.use_cases.image.upload import (
     UploadImageUseCase,
     UploadImageCommand,
@@ -65,6 +67,7 @@ async def upload_image(
         result: UploadImageResult = await use_case.act(command=command)
 
         return CreateImageOutSchema(
+            uid=result.uid,
             url=result.url,
             width=result.width,
             height=result.height,
@@ -92,3 +95,20 @@ async def get_image(
             size=result.size,
             content_type=result.content_type,
         )
+
+
+@router.delete(
+    path="/{image_uid}/delete",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_image(
+    image_uid: UUID,
+    # user_uid: UUID = Depends(auth_by_token),
+) -> Response:
+    container = get_container()
+    async with container() as cont:
+        use_case: DeleteImageUseCase = await cont.get(DeleteImageUseCase)
+        command = DeleteImageCommand(image_uid=image_uid)
+        await use_case.act(command=command)
+
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
