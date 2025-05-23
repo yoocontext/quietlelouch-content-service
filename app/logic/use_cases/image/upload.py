@@ -107,6 +107,7 @@ class UploadImageUseCase(BaseUseCase):
         )
 
         event = ImageCreateEvent(
+            uid=image.uid,
             name=command.name,
             description=command.description,
             size=command.file.size,

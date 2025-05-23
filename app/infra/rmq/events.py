@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 
 class ImageCreateEvent(BaseModel):
+    uid: UUID
     name: str
     description: str | None
     size: int
