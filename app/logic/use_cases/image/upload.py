@@ -11,7 +11,7 @@ from domain.logic.use_cases import BaseUseCase, BaseCommand, BaseResult
 from domain.mappers.entities import ContentEntityMapper
 from infra.pg.repository.content.image import ImageRepository
 from infra.pg.schemas.image import ImageCreateSchema
-from infra.rmq.events import ImageCreateEvent
+from infra.rmq.events import CreateImageEvent
 from infra.rmq.queues import CREATE_IMAGE
 from infra.s3.boto_client import BotoClient
 from infra.s3.const import Bucket, ClientMethod
@@ -111,7 +111,7 @@ class UploadImageUseCase(BaseUseCase):
             content_type=media_type.value
         )
 
-        event = ImageCreateEvent(
+        event = CreateImageEvent(
             uid=image.uid,
             name=command.name,
             description=command.description,
