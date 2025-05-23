@@ -6,8 +6,9 @@ from infra.pg.repository import ImageRepository
 from infra.s3.boto_client import BotoClient
 from logic.services.content.media_type import GetMediaTypeService
 from logic.services.content.metadata import GetPictureMetadataService
-from logic.use_cases.image import UploadImageUseCase
+from logic.use_cases.image.upload import UploadImageUseCase
 from logic.use_cases.image.get import GetImageUseCase
+from logic.use_cases.image.delete import DeleteImageUseCase
 
 
 class ImageUseCaseProvider(Provider):
@@ -42,3 +43,15 @@ class ImageUseCaseProvider(Provider):
             image_repository=image_repository,
         )
         return case
+
+    @provide(scope=Scope.REQUEST)
+    def create_delete(
+        self,
+        s3_client: BotoClient,
+        broker: RabbitBroker,
+    ) -> DeleteImageUseCase:
+        use_case = DeleteImageUseCase(
+            s3_client=s3_client,
+            broker=broker,
+        )
+        return use_case
