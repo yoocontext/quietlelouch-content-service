@@ -49,9 +49,11 @@ class ImageUseCaseProvider(Provider):
         self,
         s3_client: BotoClient,
         broker: RabbitBroker,
+        repository: ImageRepository
     ) -> DeleteImageUseCase:
         use_case = DeleteImageUseCase(
             s3_client=s3_client,
             broker=broker,
+            repository=repository,
         )
         return use_case

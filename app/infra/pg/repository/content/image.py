@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.orm import joinedload
 
 from domain.entities.content import Image
@@ -64,6 +64,7 @@ class ImageRepository(BaseRepository):
             language_orm: LanguageOrm = await self.language_repository.get_by_name(name=image_schema.language)
 
         image_orm = ImageOrm(
+            uid=image_schema.uid,
             name=image_schema.name,
             description=image_schema.description,
             height=image_schema.height,
@@ -86,3 +87,14 @@ class ImageRepository(BaseRepository):
         image: Image = self.orm_mapper.get_image(image_orm)
 
         return image
+
+    async def delete(self, uid: UUID) -> None:
+        result = await self.session.execute(
+            delete(ImageOrm)
+            .where(ImageOrm.uid == uid)
+            .returning(ImageOrm.uid)
+        )
+        deleted_uid = result.scalar_one_or_none()
+
+        if not deleted_uid:
+            raise ObjectNotFoundException(required_obj=deleted_uid)

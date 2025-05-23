@@ -3,7 +3,7 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class ImageCreateEvent(BaseModel):
+class CreateImageEvent(BaseModel):
     uid: UUID
     name: str
     description: str | None
@@ -17,5 +17,5 @@ class ImageCreateEvent(BaseModel):
     language: str | None
 
 
-class ImageDeleteEvent(BaseModel):
+class DeleteImageEvent(BaseModel):
     uid: UUID
