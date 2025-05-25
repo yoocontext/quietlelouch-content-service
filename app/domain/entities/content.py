@@ -29,6 +29,11 @@ class Image(BaseEntity):
     size: ImageSizeValue
     width: int
     height: int
+    # nsfw: bool
+    # language: str
+    # author: Author | None
+    # access_roles: list["Role"]
+    # tags: list["Tag"] = field(default_factory=list)
 
 
 @dataclass(kw_only=True)
@@ -55,4 +60,10 @@ class Page(BaseEntity):
 @dataclass(kw_only=True)
 class Tag(BaseEntity):
     name: NameValue
-    description: DescriptionValue | None = None
+    description: DescriptionValue | None
+
+
+@dataclass(kw_only=True)
+class Role(BaseEntity):
+    name: str
+    description: DescriptionValue | None

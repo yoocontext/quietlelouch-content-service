@@ -1,8 +1,8 @@
 """init
 
-Revision ID: b6761c4d1a7e
+Revision ID: e4756db40b04
 Revises: 
-Create Date: 2025-05-19 00:12:11.894646
+Create Date: 2025-05-25 22:09:13.445545
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'b6761c4d1a7e'
+revision: str = 'e4756db40b04'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -46,10 +46,10 @@ def upgrade() -> None:
     op.create_table('tags',
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('description', sa.String(), nullable=True),
-    sa.Column('pk', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('uid', sa.Uuid(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.PrimaryKeyConstraint('pk'),
+    sa.PrimaryKeyConstraint('uid'),
     sa.UniqueConstraint('name')
     )
     op.create_table('titles',
@@ -72,7 +72,7 @@ def upgrade() -> None:
     sa.Column('added_by', sa.Uuid(), nullable=False, comment='foreign key to UserOrm from User Service'),
     sa.Column('author_uid', sa.Uuid(), nullable=True),
     sa.Column('title_pk', sa.Integer(), nullable=True),
-    sa.Column('language_pk', sa.Integer(), nullable=False),
+    sa.Column('language_pk', sa.Integer(), nullable=True),
     sa.Column('uid', sa.Uuid(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
@@ -92,7 +92,7 @@ def upgrade() -> None:
     sa.Column('added_by', sa.Uuid(), nullable=False, comment='foreign key to UserOrm from User Service'),
     sa.Column('author_uid', sa.Uuid(), nullable=True),
     sa.Column('title_pk', sa.Integer(), nullable=True),
-    sa.Column('language_pk', sa.Integer(), nullable=False),
+    sa.Column('language_pk', sa.Integer(), nullable=True),
     sa.Column('uid', sa.Uuid(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
@@ -132,7 +132,7 @@ def upgrade() -> None:
     sa.Column('added_by', sa.Uuid(), nullable=False, comment='foreign key to UserOrm from User Service'),
     sa.Column('author_uid', sa.Uuid(), nullable=True),
     sa.Column('title_pk', sa.Integer(), nullable=True),
-    sa.Column('language_pk', sa.Integer(), nullable=False),
+    sa.Column('language_pk', sa.Integer(), nullable=True),
     sa.Column('uid', sa.Uuid(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
@@ -151,10 +151,10 @@ def upgrade() -> None:
     )
     op.create_table('a_gifs_tags',
     sa.Column('gif_uid', sa.Uuid(), nullable=False),
-    sa.Column('tag_pk', sa.Integer(), nullable=False),
+    sa.Column('tag_pk', sa.Uuid(), nullable=False),
     sa.Column('pk', sa.Integer(), autoincrement=True, nullable=False),
     sa.ForeignKeyConstraint(['gif_uid'], ['gifs.uid'], ),
-    sa.ForeignKeyConstraint(['tag_pk'], ['tags.pk'], ),
+    sa.ForeignKeyConstraint(['tag_pk'], ['tags.uid'], ),
     sa.PrimaryKeyConstraint('gif_uid', 'tag_pk', 'pk')
     )
     op.create_table('a_images_roles',
@@ -167,10 +167,10 @@ def upgrade() -> None:
     )
     op.create_table('a_images_tags',
     sa.Column('image_uid', sa.Uuid(), nullable=False),
-    sa.Column('tag_pk', sa.Integer(), nullable=False),
+    sa.Column('tag_pk', sa.Uuid(), nullable=False),
     sa.Column('pk', sa.Integer(), autoincrement=True, nullable=False),
     sa.ForeignKeyConstraint(['image_uid'], ['images.uid'], ),
-    sa.ForeignKeyConstraint(['tag_pk'], ['tags.pk'], ),
+    sa.ForeignKeyConstraint(['tag_pk'], ['tags.uid'], ),
     sa.PrimaryKeyConstraint('image_uid', 'tag_pk', 'pk')
     )
     op.create_table('a_manga_roles',
@@ -183,10 +183,10 @@ def upgrade() -> None:
     )
     op.create_table('a_manga_tags',
     sa.Column('manga_uid', sa.Uuid(), nullable=False),
-    sa.Column('tag_pk', sa.Integer(), nullable=False),
+    sa.Column('tag_pk', sa.Uuid(), nullable=False),
     sa.Column('pk', sa.Integer(), autoincrement=True, nullable=False),
     sa.ForeignKeyConstraint(['manga_uid'], ['mangas.uid'], ),
-    sa.ForeignKeyConstraint(['tag_pk'], ['tags.pk'], ),
+    sa.ForeignKeyConstraint(['tag_pk'], ['tags.uid'], ),
     sa.PrimaryKeyConstraint('manga_uid', 'tag_pk', 'pk')
     )
     op.create_table('a_videos_roles',
@@ -199,10 +199,10 @@ def upgrade() -> None:
     )
     op.create_table('a_videos_tags',
     sa.Column('gif_uid', sa.Uuid(), nullable=False),
-    sa.Column('tags_pk', sa.Integer(), nullable=False),
+    sa.Column('tags_pk', sa.Uuid(), nullable=False),
     sa.Column('pk', sa.Integer(), autoincrement=True, nullable=False),
     sa.ForeignKeyConstraint(['gif_uid'], ['videos.uid'], ),
-    sa.ForeignKeyConstraint(['tags_pk'], ['tags.pk'], ),
+    sa.ForeignKeyConstraint(['tags_pk'], ['tags.uid'], ),
     sa.PrimaryKeyConstraint('gif_uid', 'tags_pk', 'pk')
     )
     op.create_table('pages',

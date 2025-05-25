@@ -6,7 +6,7 @@ from infra.pg.models import (
     LanguageOrm,
 )
 
-from infra.pg.schemas.create import (
+from infra.pg.dto.create import (
     TagCreateSchema,
     RoleCreateSchema,
     TitleCreateSchema,
@@ -16,8 +16,6 @@ from infra.pg.schemas.create import (
 
 
 class ContentCreateSchemaToOrmMapper:
-
-
     @staticmethod
     def create_tags(tags: list[TagCreateSchema]) -> list[TagOrm]:
         tags_orm: list[TagOrm] = []

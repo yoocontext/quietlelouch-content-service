@@ -8,7 +8,7 @@ from domain.values.exceptions import (
     TextTooShortException,
     ImageTooLargeError,
 )
-from infra.pg.repository.common.exceptions import (
+from infra.pg.dao.exceptions import (
     ObjectNotFoundException,
     MissingRequiredFieldException,
 )

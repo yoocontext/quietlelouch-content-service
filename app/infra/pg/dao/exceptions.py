@@ -5,14 +5,14 @@ from uuid import UUID
 from domain.exceptions import InfraException
 
 
-class BaseRepositoryException(InfraException):
+class BaseDaoException(InfraException):
     @property
     def message(self) -> str:
         return "Repository error"
 
 
 @dataclass
-class ObjectNotFoundException(BaseRepositoryException):
+class ObjectNotFoundException(BaseDaoException):
     required_obj: UUID
 
     @property
@@ -21,7 +21,7 @@ class ObjectNotFoundException(BaseRepositoryException):
 
 
 @dataclass
-class MissingRequiredFieldException(BaseRepositoryException):
+class MissingRequiredFieldException(BaseDaoException):
     required_field: str | Iterable
 
     @property

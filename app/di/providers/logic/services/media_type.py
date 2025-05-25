@@ -1,6 +1,6 @@
 from dishka import Provider, Scope, provide
 
-from logic.services.content.media_type import GetMediaTypeService
+from logic.services.meta.media_type import GetMediaTypeService
 
 
 class MediaTypeProvider(Provider):

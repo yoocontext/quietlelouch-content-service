@@ -2,12 +2,12 @@ from uuid import UUID
 
 from sqlalchemy import select
 
+from infra.pg.dao.base import BaseDao
 from infra.pg.models import AuthorOrm
-from infra.pg.repository.common.base import BaseRepository
-from infra.pg.repository.common.exceptions import ObjectNotFoundException, MissingRequiredFieldException
+from infra.pg.dao.exceptions import ObjectNotFoundException, MissingRequiredFieldException
 
 
-class AuthorRepository(BaseRepository):
+class AuthorDao(BaseDao):
     async def get_by_uid(self, uid: UUID) -> AuthorOrm:
         author_orm: AuthorOrm | None = await self.session.get(AuthorOrm, uid)
         if author_orm:

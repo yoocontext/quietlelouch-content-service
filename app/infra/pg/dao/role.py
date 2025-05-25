@@ -1,11 +1,11 @@
 from sqlalchemy import select
 
+from infra.pg.dao.base import BaseDao
 from infra.pg.models import RoleOrm
-from infra.pg.repository.common.base import BaseRepository
-from infra.pg.repository.common.exceptions import MissingRequiredFieldException
+from infra.pg.dao.exceptions import MissingRequiredFieldException
 
 
-class RoleRepository(BaseRepository):
+class RoleDao(BaseDao):
     async def get_by_names(self, names: set[str]) -> list[RoleOrm]:
         result = await self.session.execute(
             select(RoleOrm)
