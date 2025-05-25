@@ -9,14 +9,14 @@ from domain.entities.content import Image
 from domain.values.content.common import MediaType
 from domain.logic.use_cases import BaseUseCase, BaseCommand, BaseResult
 from domain.mappers.entities import ContentEntityMapper
-from infra.pg.repository.content.image import ImageRepository
-from infra.pg.schemas.image import ImageCreateSchema
+from infra.pg.repository.image import ImageRepository
+from infra.pg.dto.image import ImageCreateDto
 from infra.rmq.events import CreateImageEvent
 from infra.rmq.queues import CREATE_IMAGE
 from infra.s3.boto_client import BotoClient
 from infra.s3.const import Bucket, ClientMethod
-from logic.services.content.media_type import GetMediaTypeService
-from logic.services.content.metadata import GetPictureMetadataService, PictureMetadata
+from logic.services.meta.media_type import GetMediaTypeService
+from logic.services.meta.metadata import GetPictureMetadataService, PictureMetadata
 
 
 @dataclass
@@ -33,10 +33,17 @@ class UploadImageCommand(BaseCommand):
     language: Annotated[str | None, "language name"]
 
 
-@dataclass
+@dataclass(kw_only=True)
 class UploadImageResult(BaseResult):
     uid: UUID
     url: str
+    name: str
+    description: str | None
+    nsfw: bool | None = None
+    tags: Annotated[set[str], "tag names"]
+    title: str | None = None
+    author: Annotated[str | None, "author name"]
+    language: Annotated[str | None, "language name"]
     width: int
     height: int
     size: int
@@ -82,7 +89,7 @@ class UploadImageUseCase(BaseUseCase):
             },
             http_method='GET'
         )
-        image_schema = ImageCreateSchema(
+        image_schema = ImageCreateDto(
             uid=image.uid,
             name=image.name.as_generic_type(),
             description=command.description,
@@ -99,7 +106,7 @@ class UploadImageUseCase(BaseUseCase):
             language=command.language,
         )
 
-        await self.image_repository.create(image_schema=image_schema)
+        await self.image_repository.create(create_schema=image_schema)
         await self.image_repository.session.commit()
 
         result = UploadImageResult(
@@ -108,7 +115,14 @@ class UploadImageUseCase(BaseUseCase):
             width=image_metadata.width,
             height=image_metadata.height,
             size=command.file.size,
-            content_type=media_type.value
+            content_type=media_type.value,
+            name=image.name.as_generic_type(),
+            description=command.description,
+            nsfw=command.nsfw,
+            tags=command.tags,
+            title=command.title,
+            author=command.author,
+            language=command.language,
         )
 
         event = CreateImageEvent(

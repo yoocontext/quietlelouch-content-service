@@ -1,15 +1,16 @@
 from dataclasses import dataclass
 
+from domain.entities.author import Author
 from domain.entities.content import Image
 from domain.mappers.values import ContentValuesMapper
 from domain.values.content.common import NameValue, TitleValue, DescriptionValue, MediaTypeValue
 from domain.values.content.image import ImageSizeValue
 
-from infra.pg.models import ImageOrm
+from infra.pg.models import ImageOrm, AuthorOrm
 
 
 @dataclass
-class ContentOrmToEntityMapper:
+class ImageOrmToEntityMapper:
     values_mapper: ContentValuesMapper
 
     def get_image(self, image_orm: ImageOrm) -> Image:
@@ -36,3 +37,13 @@ class ContentOrmToEntityMapper:
             height=image_orm.height,
         )
         return image
+
+
+@dataclass
+class AuthorOrmToEntityMapper:
+    values_mapper: ContentValuesMapper
+
+    def get_author(self, author_orm: AuthorOrm) -> Author:
+        ...
+
+

@@ -1,8 +1,8 @@
-from .orm_to_entity import ContentOrmToEntityMapper
-from .schema_to_orm import ContentCreateSchemaToOrmMapper
+from .image import ImageOrmToEntityMapper
+from .common import ContentCreateSchemaToOrmMapper
 
 
 __all__ = (
-    "ContentOrmToEntityMapper",
+    "ImageOrmToEntityMapper",
     "ContentCreateSchemaToOrmMapper",
 )

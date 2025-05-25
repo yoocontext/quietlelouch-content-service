@@ -1,6 +1,6 @@
 from dishka import Provider, Scope, provide
 
-from logic.services.content.metadata import GetPictureMetadataService
+from logic.services.meta.metadata import GetPictureMetadataService
 
 
 class MetadataProvider(Provider):

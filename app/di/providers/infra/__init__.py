@@ -3,6 +3,7 @@ from .app import (
     DatabaseProvider,
     FastStreamProvider,
 )
+from .dao import DaoProvider
 from .mappers import PgMapperProvider
 from .repository import RepositoryProvider
 
@@ -13,4 +14,5 @@ __all__ = (
     "FastStreamProvider",
     "PgMapperProvider",
     "RepositoryProvider",
+    "DaoProvider",
 )

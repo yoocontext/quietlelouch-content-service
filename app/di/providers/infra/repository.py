@@ -1,14 +1,17 @@
 from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from infra.pg.mappers import ContentOrmToEntityMapper
+from infra.pg.mappers import ImageOrmToEntityMapper
 from infra.pg.repository import (
-    AuthorRepository,
-    RoleRepository,
-    TagRepository,
     ImageRepository,
-    TitleRepository,
-    LanguageRepository,
+)
+from infra.pg.dao import (
+    TagDao,
+    RoleDao,
+    TitleDao,
+    AuthorDao,
+    LanguageDao,
+    ImageDao,
 )
 
 
@@ -17,51 +20,22 @@ class RepositoryProvider(Provider):
     def create_image(
         self,
         session: AsyncSession,
-        tag_repository: TagRepository,
-        role_repository: RoleRepository,
-        title_repository: TitleRepository,
-        author_repository: AuthorRepository,
-        language_repository: LanguageRepository,
-        orm_mapper: ContentOrmToEntityMapper,
+        tag_dao: TagDao,
+        role_dao: RoleDao,
+        title_dao: TitleDao,
+        author_dao: AuthorDao,
+        language_dao: LanguageDao,
+        image_dao: ImageDao,
+        orm_mapper: ImageOrmToEntityMapper,
     ) -> ImageRepository:
         repo = ImageRepository(
             session=session,
-            tag_repository=tag_repository,
-            role_repository=role_repository,
-            title_repository=title_repository,
-            author_repository=author_repository,
-            language_repository=language_repository,
-            orm_mapper=orm_mapper,
+            tag_dao=tag_dao,
+            role_dao=role_dao,
+            title_dao=title_dao,
+            author_dao=author_dao,
+            language_dao=language_dao,
+            image_dao=image_dao,
+            mapper=orm_mapper,
         )
-        return repo
-
-
-    @provide(scope=Scope.REQUEST)
-    def create_author(self, session: AsyncSession) -> AuthorRepository:
-        repo = AuthorRepository(session=session)
-        return repo
-
-    @provide(scope=Scope.REQUEST)
-    def create_role(self, session: AsyncSession) -> RoleRepository:
-        repo = RoleRepository(session=session)
-        return repo
-
-    @provide(scope=Scope.REQUEST)
-    def create_tag(self, session: AsyncSession) -> TagRepository:
-        repo = TagRepository(session=session)
-        return repo
-
-    @provide(scope=Scope.REQUEST)
-    def create_title(self, session: AsyncSession) -> TitleRepository:
-        repo = TitleRepository(session=session)
-        return repo
-
-    @provide(scope=Scope.REQUEST)
-    def create_author(self, session: AsyncSession) -> AuthorRepository:
-        repo = AuthorRepository(session=session)
-        return repo
-
-    @provide(scope=Scope.REQUEST)
-    def create_language(self, session: AsyncSession) -> LanguageRepository:
-        repo = LanguageRepository(session=session)
         return repo

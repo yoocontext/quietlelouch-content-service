@@ -2,12 +2,12 @@ from uuid import UUID
 
 from sqlalchemy import select
 
+from infra.pg.dao.base import BaseDao
 from infra.pg.models import LanguageOrm
-from infra.pg.repository.common.base import BaseRepository
-from infra.pg.repository.common.exceptions import ObjectNotFoundException, MissingRequiredFieldException
+from infra.pg.dao.exceptions import ObjectNotFoundException, MissingRequiredFieldException
 
 
-class LanguageRepository(BaseRepository):
+class LanguageDao(BaseDao):
     async def get_by_uid(self, uid: UUID) -> LanguageOrm:
         language_orm: LanguageOrm | None = await self.session.get(LanguageOrm, uid)
         if language_orm:

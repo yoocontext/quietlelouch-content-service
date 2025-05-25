@@ -7,6 +7,7 @@ from .infra import (
     Boto3Provider,
     RepositoryProvider,
     PgMapperProvider,
+    DaoProvider,
 )
 from .logic import (
     ImageUseCaseProvider,
@@ -22,6 +23,7 @@ __all__ = (
     "DatabaseProvider",
     "Boto3Provider",
     "RepositoryProvider",
+    "DaoProvider",
     "ImageUseCaseProvider",
     "MetadataProvider",
     "MediaTypeProvider",

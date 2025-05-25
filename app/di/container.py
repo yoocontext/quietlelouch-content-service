@@ -14,6 +14,7 @@ from .providers import (
     MetadataProvider,
     MediaTypeProvider,
     PgMapperProvider,
+    DaoProvider,
 )
 
 
@@ -31,5 +32,6 @@ def get_container() -> AsyncContainer:
         MetadataProvider(),
         MediaTypeProvider(),
         PgMapperProvider(),
+        DaoProvider(),
     )
     return container
