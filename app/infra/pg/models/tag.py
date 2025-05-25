@@ -36,26 +36,26 @@ class TagOrm(BaseOrm, UidPkMixin, CreateAtMixin, UpdateAtMixin):
 class VideosTagsOrm(BaseOrm, IntPkMixin):
     __tablename__ = "a_videos_tags"
 
-    gif_uid: Mapped[UUID] = mapped_column(ForeignKey("videos.uid"), primary_key=True)
-    tags_pk: Mapped[int] = mapped_column(ForeignKey("tags.uid"), primary_key=True)
+    gif_uid: Mapped[UUID] = mapped_column(ForeignKey("videos.uid", ondelete="CASCADE"), primary_key=True)
+    tags_pk: Mapped[int] = mapped_column(ForeignKey("tags.uid", ondelete="CASCADE"),  primary_key=True)
 
 
 class GifsTagsOrm(BaseOrm, IntPkMixin):
     __tablename__ = "a_gifs_tags"
 
-    gif_uid: Mapped[UUID] = mapped_column(ForeignKey("gifs.uid"), primary_key=True)
-    tag_pk: Mapped[int] = mapped_column(ForeignKey("tags.uid"), primary_key=True)
+    gif_uid: Mapped[UUID] = mapped_column(ForeignKey("gifs.uid", ondelete="CASCADE"), primary_key=True)
+    tag_pk: Mapped[int] = mapped_column(ForeignKey("tags.uid", ondelete="CASCADE"), primary_key=True)
 
 
 class ImagesTagsOrm(BaseOrm, IntPkMixin):
     __tablename__ = "a_images_tags"
 
-    image_uid: Mapped[UUID] = mapped_column(ForeignKey("images.uid"), primary_key=True)
-    tag_pk: Mapped[int] = mapped_column(ForeignKey("tags.uid"), primary_key=True)
+    image_uid: Mapped[UUID] = mapped_column(ForeignKey("images.uid", ondelete="CASCADE"), primary_key=True)
+    tag_pk: Mapped[int] = mapped_column(ForeignKey("tags.uid", ondelete="CASCADE"), primary_key=True)
 
 
 class MangasTagsOrm(BaseOrm, IntPkMixin):
     __tablename__ = "a_manga_tags"
 
-    manga_uid: Mapped[UUID] = mapped_column(ForeignKey("mangas.uid"), primary_key=True)
-    tag_pk: Mapped[int] = mapped_column(ForeignKey("tags.uid"), primary_key=True)
+    manga_uid: Mapped[UUID] = mapped_column(ForeignKey("mangas.uid", ondelete="CASCADE"), primary_key=True)
+    tag_pk: Mapped[int] = mapped_column(ForeignKey("tags.uid", ondelete="CASCADE"), primary_key=True)

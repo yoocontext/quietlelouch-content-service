@@ -42,19 +42,19 @@ class MangasRolesOrm(BaseOrm, IntPkMixin):
 class ImagesRolesOrm(BaseOrm, IntPkMixin):
     __tablename__ = "a_images_roles"
 
-    image_uid: Mapped[UUID] = mapped_column(ForeignKey("images.uid"), primary_key=True)
-    role_pk: Mapped[int] = mapped_column(ForeignKey("roles.uid"), primary_key=True)
+    image_uid: Mapped[UUID] = mapped_column(ForeignKey("images.uid", ondelete="CASCADE"), primary_key=True)
+    role_pk: Mapped[int] = mapped_column(ForeignKey("roles.uid", ondelete="CASCADE"), primary_key=True)
 
 
 class GifsRolesOrm(BaseOrm, IntPkMixin):
     __tablename__ = "a_gifs_roles"
 
-    gif_uid: Mapped[UUID] = mapped_column(ForeignKey("gifs.uid"), primary_key=True)
-    role_pk: Mapped[int] = mapped_column(ForeignKey("roles.uid"), primary_key=True)
+    gif_uid: Mapped[UUID] = mapped_column(ForeignKey("gifs.uid", ondelete="CASCADE"), primary_key=True)
+    role_pk: Mapped[int] = mapped_column(ForeignKey("roles.uid", ondelete="CASCADE"), primary_key=True)
 
 
 class VideosRolesOrm(BaseOrm, IntPkMixin):
     __tablename__ = "a_videos_roles"
 
-    gif_uid: Mapped[UUID] = mapped_column(ForeignKey("videos.uid"), primary_key=True)
-    role_pk: Mapped[int] = mapped_column(ForeignKey("roles.uid"), primary_key=True)
+    gif_uid: Mapped[UUID] = mapped_column(ForeignKey("videos.uid", ondelete="CASCADE"), primary_key=True)
+    role_pk: Mapped[int] = mapped_column(ForeignKey("roles.uid", ondelete="CASCADE"), primary_key=True)

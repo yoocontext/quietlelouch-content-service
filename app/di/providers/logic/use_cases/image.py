@@ -66,10 +66,12 @@ class ImageUseCaseProvider(Provider):
         image_repository: ImageRepository,
         image_dao: ImageDao,
         s3_client: BotoClient,
+        broker: RabbitBroker,
     ) -> UpdateImageUseCase:
         case = UpdateImageUseCase(
             image_repository=image_repository,
             image_dao=image_dao,
             s3_client=s3_client,
+            broker=broker,
         )
         return case

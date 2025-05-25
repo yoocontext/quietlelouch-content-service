@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from typing import Annotated, Optional
 from uuid import UUID
 
+from faststream.rabbit import RabbitBroker
+
 from domain.entities.content import Image
 from domain.logic.use_cases import (
     BaseUseCase,
@@ -12,6 +14,8 @@ from infra.pg.dao.image import ImageDao
 from infra.pg.dto.image import ImageUpdateDto
 from infra.pg.models import ImageOrm
 from infra.pg.repository import ImageRepository
+from infra.rmq.events import UpdateImageEvent
+from infra.rmq.queues import UPDATE_IMAGE
 from infra.s3.boto_client import BotoClient
 from infra.s3.const import ClientMethod, Bucket
 
@@ -63,6 +67,7 @@ class UpdateImageUseCase(BaseUseCase):
     image_repository: ImageRepository
     image_dao: ImageDao
     s3_client: BotoClient
+    broker: RabbitBroker
 
     async def act(self, command: UpdateImageCommand) -> UpdateImageResult:
         image_orm: ImageOrm = await self.image_dao.get(uid=command.image_uid)
@@ -98,7 +103,6 @@ class UpdateImageUseCase(BaseUseCase):
         author: str | None = image_orm.author.name if image_orm.author else None
         language: str | None = image_orm.language.name if image_orm.language else None
 
-
         url: str = await self.s3_client.generate_presigned_url(
             client_method=ClientMethod.GET_OBJECT.value,
             params={
@@ -107,6 +111,20 @@ class UpdateImageUseCase(BaseUseCase):
             },
             http_method='GET'
         )
+
+        event = UpdateImageEvent(
+            uid=image.uid,
+            name=image.name.as_generic_type(),
+            description=description,
+            size=image.size.as_generic_type(),
+            media_type=image.media_type.value,
+            nsfw=image_orm.nsfw,
+            tags=update_tags,
+            access_roles=update_access_roles,
+            title=title,
+            language=language,
+        )
+        await self.broker.publish(message=event, queue=UPDATE_IMAGE)
 
         result = UpdateImageResult(
             uid=image.uid,
