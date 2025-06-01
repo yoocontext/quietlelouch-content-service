@@ -1,3 +1,4 @@
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from fastapi import FastAPI
 
 from application.exceptions import register_exception_handlers
@@ -17,5 +18,7 @@ def create_app() -> FastAPI:
     register_exception_handlers(app=app)
 
     app.include_router(v1_router)
+
+    FastAPIInstrumentor.instrument_app(app)
 
     return app
