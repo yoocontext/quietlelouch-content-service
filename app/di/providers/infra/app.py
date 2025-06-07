@@ -3,6 +3,7 @@ from typing import AsyncIterable
 from aioboto3 import Session
 from dishka import Provider, Scope, provide
 from faststream.rabbit import RabbitBroker
+from faststream.rabbit.opentelemetry import RabbitTelemetryMiddleware
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -10,6 +11,7 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
 )
 
+from application.otel_config import tracer_provider
 from core.settings.base import CommonSettings
 from infra.s3.boto_client import AsyncS3ClientProtocol, BotoClient
 
@@ -17,17 +19,23 @@ from infra.s3.boto_client import AsyncS3ClientProtocol, BotoClient
 class FastStreamProvider(Provider):
     @provide(scope=Scope.APP)
     async def create_broker(self, settings: CommonSettings) -> AsyncIterable[RabbitBroker]:
-        async with RabbitBroker(url=settings.rmq.rabbit_broker_url) as broker:
+        async with RabbitBroker(
+            url=settings.rmq.rabbit_broker_url,
+            middlewares=(
+                RabbitTelemetryMiddleware(tracer_provider=tracer_provider),
+            )
+        ) as broker:
             yield broker
 
 
 class DatabaseProvider(Provider):
     @provide(scope=Scope.APP)
     async def create_engine(self, settings: CommonSettings) -> AsyncEngine:
-        return create_async_engine(
+        engine: AsyncEngine = create_async_engine(
             url=settings.pg.postgres_url,
             echo=False,
         )
+        return engine
 
     @provide(scope=Scope.APP)
     async def create_session_maker(
