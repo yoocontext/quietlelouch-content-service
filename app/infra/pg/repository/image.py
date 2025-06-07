@@ -13,7 +13,7 @@ from infra.pg.dao.role import RoleDao
 from infra.pg.dao.tag import TagDao
 from infra.pg.dao.title import TitleDao
 from infra.pg.dto.image import ImageCreateDto, ImageUpdateDto
-from infra.pg.repository.common.base import BaseRepository
+from infra.pg.repository.base import BaseRepository
 from infra.pg.mappers import (
     ImageOrmToEntityMapper,
 )
